@@ -20,7 +20,7 @@ const createAboutMe = (services: AboutMeServices): GQLModule => ({
     resolvers: {
         Query: {
             // https://www.graphql-tools.com/docs/resolvers
-            me: (_, __, {user}) => {
+            me: ({ctx: {user}}) => {
                 return {
                     id: user.id,
                     type: 'person',
@@ -28,14 +28,6 @@ const createAboutMe = (services: AboutMeServices): GQLModule => ({
                     lastName: 'Doe'
                 }
             }
-            /*
-            me: () => ({
-                id: '1234',
-                type: 'person',
-                firstName: 'John',
-                lastName: 'Doe'
-            })
-            */
         }
     }
 })
