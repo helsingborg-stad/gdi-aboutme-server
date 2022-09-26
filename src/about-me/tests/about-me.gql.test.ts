@@ -2,7 +2,6 @@ import * as request from 'supertest'
 import * as jwt from 'jsonwebtoken'
 import { createAboutMeApp } from "../../aboutme-app"
 import { createAuthorizationService } from "../../framework/services/authorization-service"
-import { withApplication } from "../../framework/test-framework/with-application"
 
 const TEST_SHARED_SCERET = 'a shared secret for the tests in this file'
 
@@ -18,8 +17,7 @@ const createAuthorizationHeadersFor = (id: string, secret: string = TEST_SHARED_
 })
 
 describe('/aboutme/graphql', () => {
-    it('gives 401 if no bearer token is supplied', () => withApplication(
-        createTestApp(),
+    it('gives 401 if no bearer token is supplied', () => createTestApp().run(
         async server => {
             const {status, body: {data}} = await request(server)
                 .post('/api/v1/aboutme/graphql')
@@ -35,8 +33,7 @@ describe('/aboutme/graphql', () => {
                 
             expect(status).toBe(401)
         }))
-    it('gives 401 if invalid bearer token is supplied', () => withApplication(
-        createTestApp(),
+    it('gives 401 if invalid bearer token is supplied', () => createTestApp().run(
         async server => {
             const {status, body: {data}} = await request(server)
                 .post('/api/v1/aboutme/graphql')
@@ -54,8 +51,7 @@ describe('/aboutme/graphql', () => {
             expect(status).toBe(401)
         }))
     
-    it('extracts user id from bearer token', () => withApplication(
-        createTestApp(),
+    it('extracts user id from bearer token', () => createTestApp().run(
         async server => {
             const {status, body: {data}} = await request(server)
                 .post('/api/v1/aboutme/graphql')

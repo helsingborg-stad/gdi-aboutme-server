@@ -7,9 +7,22 @@ import OpenAPIBackend, { Context } from 'openapi-backend'
 import { Application, ApplicationModule } from './types'
 import { mapValues } from './util'
 
+const TEST_PORT = 4444
+
 interface CreateApplicationArgs {
 	openApiDefinitionPath: string,
 	validateResponse?: boolean
+}
+
+// simple memoization - at most one evaluation, evalauation as late as possible
+const ensureOnce = <T>(fn: (() => Promise<T>)): (() => Promise<T>) => {
+	let value: Promise<T> | null = null
+	return async () => {
+		if (!value) {
+			value = fn()
+		}
+		return value
+	}
 }
 
 const performResponseValidation = (c: Context, ctx: Koa.Context) => {
@@ -75,6 +88,18 @@ export function createApplication({ openApiDefinitionPath, validateResponse }: C
 		},
 	})
 
+	const init = ensureOnce(async () => {
+		// finalize api
+		await api.init()
+		return app
+		// wire all custom routes
+			.use(router.routes())
+			.use(router.allowedMethods())
+		// wire in API endpoints
+			.use((ctx, next) => api.handleRequest(ctx.request, ctx, next))					
+	})
+
+
 	return {
 		getContext() {
 			return {
@@ -90,15 +115,16 @@ export function createApplication({ openApiDefinitionPath, validateResponse }: C
 			return this
 		},
 		async start(port) {
-			// finalize api
-			await api.init()
-			return app
-			// wire all custom routes
-				.use(router.routes())
-				.use(router.allowedMethods())
-			// wire in API endpoints
-				.use((ctx, next) => api.handleRequest(ctx.request, ctx, next))
+			return (await init())
 				.listen(port, () => debug(`Server listening to port ${port}`))
 		},
+		async run(handler, port = TEST_PORT) {
+			const server = await this.start(port)
+			try {
+				await handler(server)
+			} finally {
+				await new Promise((resolve, reject) => server.close(err => err ? reject(err) : resolve(null)))
+			}
+		}
 	}
 } 

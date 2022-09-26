@@ -18,4 +18,5 @@ export interface Application {
     getContext(): ApplicationContext
     use(module: ApplicationModule): Application
     start(port: number|string): Promise<Server>
+    run(handler: ((server: Server) => Promise<any>), port?: number): Promise<void>
 }

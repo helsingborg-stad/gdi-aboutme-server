@@ -1,7 +1,6 @@
 import * as request from 'supertest'
 import swaggerModule from '..'
 import { createApplication } from '../../../application'
-import { withApplication } from '../../../test-framework/with-application'
 
 const createTestApp = () => createApplication({
     openApiDefinitionPath: './openapi.yml',
@@ -9,8 +8,7 @@ const createTestApp = () => createApplication({
 }).use(swaggerModule())
 
 describe('swagger-module', () => {
-	it('GET /swagger.json responds with JSON', async () => withApplication(
-		createTestApp(),
+	it('GET /swagger.json responds with JSON', async () => createTestApp().run(
 		async server => {
 			const { headers, status } = await request(server)
 				.get('/swagger.json')
@@ -18,16 +16,14 @@ describe('swagger-module', () => {
 			expect(headers['content-type']).toMatch(/json/)
 			expect(status).toEqual(200)        
 		}))
-	it('GET / redirects to /swagger', async () => withApplication(
-		createTestApp(),
+	it('GET / redirects to /swagger', async () => createTestApp().run(
 		async server => {
 			const { status, headers } = await request(server)
 				.get('/')
 			expect(status).toBe(302)
 			expect(headers['location']).toBe('/swagger')
 		}))
-	it('GET /swagger responds with HTML', async () => withApplication(
-		createTestApp(),
+	it('GET /swagger responds with HTML', async () => createTestApp().run(
 		async server => {
 			const { status, headers } = await request(server)
 				.get('/swagger')
