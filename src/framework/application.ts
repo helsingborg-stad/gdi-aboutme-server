@@ -106,7 +106,13 @@ export function createApplication({ openApiDefinitionPath, validateResponse }: C
 				router,
 				api,
 				application: this,
-				registerKoaApi: handlers => api.register(mapValues(handlers, handler => (c, ctx, next) => handler(ctx, next))),
+				registerKoaApi: handlers => api.register(mapValues(handlers, handler => (c, ctx, next) => {
+					// we copy params manually to be compatible with 
+					// libraries such as https://github.com/koajs/router/blob/master/API.md#url-parameters
+					// In short, openapi path parameters are parsed and made visible in koa context 
+					ctx.params = c.request.params
+					handler(ctx, next)
+				}))
 			}
 		}, 
 		use(module: ApplicationModule) {
