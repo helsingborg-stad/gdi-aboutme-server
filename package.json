@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "start": "tsc && node .",
-    "test": "jest --runInBand"
+    "test": "jest --runInBand",
+    "coverage": "jest --runInBand --coverage"
   },
   "license": "MIT",
   "dependencies": {
