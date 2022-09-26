@@ -99,7 +99,6 @@ export function createApplication({ openApiDefinitionPath, validateResponse }: C
 			.use((ctx, next) => api.handleRequest(ctx.request, ctx, next))					
 	})
 
-
 	return {
 		getContext() {
 			return {
