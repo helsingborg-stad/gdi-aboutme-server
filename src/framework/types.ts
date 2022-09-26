@@ -13,7 +13,6 @@ export interface ApplicationContext {
 
 export type ApplicationModule = (context: ApplicationContext) => void
 
-
 export interface Application {
     getContext(): ApplicationContext
     use(module: ApplicationModule): Application
