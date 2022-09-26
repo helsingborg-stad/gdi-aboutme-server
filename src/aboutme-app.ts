@@ -7,6 +7,7 @@ import webFrameworkModule from './framework/modules/web-framework-module'
 import { Application } from './framework/types'
 import { AboutMeServices } from './types'
 
+/** Create fully packaged About Me web application, given dependencies */
 export const createAboutMeApp = ({ services, validateResponse }: {services: AboutMeServices, validateResponse?: boolean}): Application =>
 	createApplication({
 		openApiDefinitionPath: './openapi.yml',

@@ -32,6 +32,7 @@ const createAboutMe = (services: AboutMeServices): GQLModule => ({
     }
 })
 
+/** Expose About Me GraphQL api */
 const aboutMeModule = (services: AboutMeServices) => ({registerKoaApi}: ApplicationContext) => registerKoaApi({
     aboutMeGql: requireJwtUser(makeGqlMiddleware(makeGqlEndpoint(createAboutMe(services))))
 })

@@ -1,6 +1,7 @@
 import { GQLEndpoint } from "./types"
 const debug = require('debug')('application:gql-middleware')
 
+/** Create Koa middleware that executes given GraphQL endpoint, passing {query, variables} */
 export function makeGqlMiddleware<TContext, TModel>(
     endpoint: GQLEndpoint<TContext, TModel>,
     {

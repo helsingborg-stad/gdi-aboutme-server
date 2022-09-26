@@ -3,7 +3,7 @@ import { graphql } from 'graphql'
 import { mapValues } from '../util'
 import { GQLEndpoint, GQLEndpointArgs, GQLModule, ResolverFn, ResolverMap } from './types'
 
-
+/** create endpoint function that given parameters resolves against a GraphQL module  */
 export function makeGqlEndpoint<TContext = any, TModel = any>({schema, resolvers}: GQLModule<TContext, TModel>): GQLEndpoint<TContext, TModel> {
     let es = makeExecutableSchema({
         typeDefs:schema,

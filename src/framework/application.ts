@@ -60,7 +60,15 @@ const performResponseValidation = (c: Context, ctx: Koa.Context) => {
 		})
 }
 	
-
+/**
+ * ### createWebApplication 
+ * create web application by wrapping with reasonable defaults
+ * -  Koa web application
+ * - routing
+ * - openapi
+ * 	- with default request validation
+ * - with optional response validation
+ */
 export function createApplication({ openApiDefinitionPath, validateResponse }: CreateApplicationArgs): Application {
 	// create app
 	const app = new Koa()

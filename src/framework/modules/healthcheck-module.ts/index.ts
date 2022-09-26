@@ -1,3 +1,4 @@
+/** Module for the healthCheck operation (which should be described in our openapi spec) */
 export const healthCheckModule = (checkHealth?: ((namespace: string) => Promise<any> | any )) => ({registerKoaApi}) => registerKoaApi({
     healthCheck: async ctx => {
         const {params: {namespace}} = ctx

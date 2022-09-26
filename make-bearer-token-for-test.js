@@ -1,12 +1,12 @@
+// ensure .env is merged with process.env
 require('dotenv').config()
-
 const path = require('path')
 const jwt = require('jsonwebtoken')
+
 const getIndexedArgPlusOne = (args, index) => index === -1 ? null : args[index+1]
 const getNamedArg = (args, name) => getIndexedArgPlusOne(args, args.indexOf(name))
 
-
-
+/** Parse commandline and echo a JWT token to stdout */
 const main = () => {
     const sharedSecret = process.env.JWT_SHARED_SECRET
 
@@ -23,7 +23,5 @@ const main = () => {
     const token = jwt.sign({id}, sharedSecret)
     console.log(token)
 }
-
-
 
 main()
