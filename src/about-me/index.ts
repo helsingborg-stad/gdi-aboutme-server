@@ -7,6 +7,10 @@ import { AboutMeServices } from "../types"
 
 const createAboutMe = (services: AboutMeServices): GQLModule => ({
     schema: `
+        input PersonUpdate {
+            firstName: String,
+            lastName: String
+        }
         type Person {
             id: String,
             type: String,
@@ -15,6 +19,13 @@ const createAboutMe = (services: AboutMeServices): GQLModule => ({
         }
         type Query {
             me: Person
+        }
+        type Mutation {
+            updateMe(update: PersonUpdate): Person
+        }
+        schema {
+            query: Query
+            mutation: Mutation
         }
         `,
     resolvers: {
