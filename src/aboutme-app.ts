@@ -1,5 +1,6 @@
-import aboutMeModule from './about-me'
+import { aboutMeModule } from './about-me'
 import { createApplication } from './framework'
+import { fallbackUserModule } from './framework/modules/fallback-user-module'
 import { healthCheckModule } from './framework/modules/healthcheck-module.ts'
 import { jwtUserModule } from './framework/modules/jwt-user-module'
 import swaggerModule from './framework/modules/swagger-module'
@@ -16,5 +17,6 @@ export const createAboutMeApp = ({ services, validateResponse }: {services: Abou
 		.use(webFrameworkModule())
 		.use(swaggerModule())
 		.use(jwtUserModule(services.authorization))
+		.use(fallbackUserModule())
 		.use(healthCheckModule())
 		.use(aboutMeModule(services))
