@@ -1,11 +1,11 @@
-import {StatusCodes} from 'http-status-codes'
+import { StatusCodes } from 'http-status-codes'
 import * as request from 'supertest'
 import swaggerModule from '..'
 import { createApplication } from '../../../application'
 
 const createTestApp = () => createApplication({
-    openApiDefinitionPath: './openapi.yml',
-    validateResponse: true
+	openApiDefinitionPath: './openapi.yml',
+	validateResponse: true,
 }).use(swaggerModule())
 
 describe('swagger-module', () => {
