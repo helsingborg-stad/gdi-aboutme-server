@@ -1,6 +1,7 @@
 import * as jwt from 'jsonwebtoken'
 import { createAboutMeApp } from '../../aboutme-app'
 import { createAuthorizationService } from '../../framework/services/authorization-service'
+import { Application } from '../../framework/types'
 import { AboutMeServices } from '../../types'
 import { createPersonRepositoryInMemory } from '../person-repository'
 
@@ -19,7 +20,7 @@ export const createTestServices = (services: Partial<AboutMeServices> = {}): Abo
 	...services,
 })
 
-export const createTestApp = (services: Partial<AboutMeServices> = {}) => createAboutMeApp({
+export const createTestApp = (services: Partial<AboutMeServices> = {}): Application => createAboutMeApp({
 	validateResponse: true,
 	services: createTestServices({
 		authorization: createAuthorizationService(TEST_SHARED_SCERET),
@@ -28,6 +29,6 @@ export const createTestApp = (services: Partial<AboutMeServices> = {}) => create
 	}),
 })
 
-export const createAuthorizationHeadersFor = (id: string, secret: string = TEST_SHARED_SCERET) => ({
+export const createAuthorizationHeadersFor = (id: string, secret: string = TEST_SHARED_SCERET): { authorization: string } => ({
 	authorization: `Bearer ${jwt.sign({ id }, secret)}`,
 })
