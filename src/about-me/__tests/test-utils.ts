@@ -1,7 +1,7 @@
 import * as jwt from 'jsonwebtoken'
 import { createAboutMeApp } from '../../aboutme-app'
-import { createAuthorizationService } from '../../framework/services/authorization-service'
-import { Application } from '../../framework/types'
+import { createAuthorizationService } from '@helsingborg-stad/gdi-api-node'
+import { Application } from '@helsingborg-stad/gdi-api-node'
 import { AboutMeServices } from '../../types'
 import { createPersonRepositoryInMemory } from '../person-repository'
 

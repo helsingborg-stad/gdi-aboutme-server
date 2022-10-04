@@ -2,7 +2,9 @@
     "compilerOptions": {
       "module": "commonjs",
       "target": "es2015",
-      "outDir": "./dist"
+      "outDir": "./dist",
+      "moduleResolution": "NodeNext",
+      "esModuleInterop": true
     },
     "include": [
       "src/**/*"
