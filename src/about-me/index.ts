@@ -1,11 +1,11 @@
-import { makeGqlEndpoint } from '../framework/gql/make-gql-endpoint'
-import { makeGqlMiddleware } from '../framework/gql/make-gql-middleware'
-import { GQLModule } from '../framework/gql/types'
-import { requireJwtUser } from '../framework/modules/jwt-user-module'
-import { ApplicationContext, ApplicationModule } from '../framework/types'
+import { makeGqlEndpoint } from '@helsingborg-stad/gdi-api-node/graphql'
+import { makeGqlMiddleware } from '@helsingborg-stad/gdi-api-node/graphql'
+import { GraphQLModule } from '@helsingborg-stad/gdi-api-node/graphql'
+import { requireJwtUser } from '@helsingborg-stad/gdi-api-node/modules/jwt-user'
+import { ApplicationContext, ApplicationModule } from '@helsingborg-stad/gdi-api-node/application'
 import { AboutMeServices } from '../types'
 
-export const createAboutMe = (services: AboutMeServices): GQLModule => ({
+export const createAboutMe = (services: AboutMeServices): GraphQLModule => ({
 	schema: `
 		scalar Date
 
