@@ -3,7 +3,7 @@ import { createAboutMeApp } from '../../aboutme-app'
 import { createAuthorizationService } from '@helsingborg-stad/gdi-api-node'
 import { Application } from '@helsingborg-stad/gdi-api-node'
 import { AboutMeServices } from '../../types'
-import { createPersonRepositoryInMemory } from '../person-repository'
+import { createPersonRepositoryInMemory } from '../person/person-repository'
 
 const TEST_SHARED_SCERET = 'a shared secret for the tests in this file'
 

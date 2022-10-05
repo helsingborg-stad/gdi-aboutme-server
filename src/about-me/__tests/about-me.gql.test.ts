@@ -3,7 +3,7 @@ import request from 'supertest'
 import { createAuthorizationHeadersFor, createTestApp } from './test-utils'
 
 describe('/aboutme/graphql', () => {
-	it('gives 401 if no bearer token is supplied', () => createTestApp().run(
+	it.only('gives 401 if no bearer token is supplied', () => createTestApp().run(
 		async server => {
 			const { status } = await request(server)
 				.post('/api/v1/aboutme/graphql')
@@ -23,7 +23,7 @@ describe('/aboutme/graphql', () => {
 		async server => {
 			const { status } = await request(server)
 				.post('/api/v1/aboutme/graphql')
-				.set(createAuthorizationHeadersFor('test-person-id-123', 'WRONG SIGNING KEY'))
+				.set(createAuthorizationHeadersFor('test-person-123', 'WRONG SIGNING KEY'))
 				.send({
 					query: `
 						query MyQuery {

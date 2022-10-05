@@ -3,7 +3,7 @@ import { createAuthorizationHeadersFor, createTestApp } from './test-utils'
 import { StatusCodes } from 'http-status-codes'
 
 describe('updateMe()', () => {
-	it.only('extracts user id from bearer token', () => createTestApp({}).run(
+	it('extracts user id from bearer token', () => createTestApp({}).run(
 		async server => {
 			const { status, body: { data, errors } } = await request(server)
 				.post('/api/v1/aboutme/graphql')
