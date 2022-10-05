@@ -1,0 +1,54 @@
+import { MongoClient, Collection, Db } from 'mongodb'
+import { getEnv } from '@helsingborg-stad/gdi-api-node'
+import { Person, PersonRepository, PersonUpdater } from '../../types'
+
+export const tryCreateMongoPersonRepositoryFromEnv = (updater: PersonUpdater): PersonRepository => {
+	const uri = getEnv('MONGODB_URI',{ trim: true, fallback: '' })
+	return uri ? createMongoPersonRepository({ uri }, updater) : null
+}
+
+export interface MongoRepositoryConfiguration {
+	uri: string,
+	dbName?: string
+}
+
+interface Connection {
+	client: MongoClient
+	db: Db,
+	collection: Collection
+}
+const connect = async ({ uri, dbName = 'aboutme' }: MongoRepositoryConfiguration): Promise<Connection> => {
+	const client = new MongoClient(uri)
+	const db = await client.db(dbName)
+	await db.collection('persons').createIndex({ id: 1 })
+	return {
+		client,
+		db,
+		collection: db.collection('persons'),
+	}
+}
+export const createMongoPersonRepository = (config: MongoRepositoryConfiguration, updater: PersonUpdater): PersonRepository => {
+	console.log({ config })
+	const c = connect(config)
+	const withCollection = <T>(handler: (collection: Collection) => Promise<T>): Promise<T> => c.then(({ collection }) => handler(collection))
+
+	return {
+		getPerson: async (id, knownFromElsewhere) => {
+			const found = await withCollection(c => c.findOne({ id }))
+			return found ? {
+				id,
+				...found,
+			}
+				: knownFromElsewhere?.()
+		},
+		updatePerson: (id, update, knownFromElsewhere) => withCollection(async c => {
+			const found = await c.findOne({ id })
+			const updated = await updater.updatePerson({
+				id,
+				...(found || knownFromElsewhere?.()),
+			}, update)
+			await (found ? c.replaceOne({ id }, updated) : c.insertOne(updated))
+			return (await c.findOne({ id })) as unknown as Person
+		}),
+	}
+}
