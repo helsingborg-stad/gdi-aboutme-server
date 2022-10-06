@@ -1,8 +1,8 @@
-import { createDefaultPersonUpdater } from '../person-updater/index'
+import { createDefaultPersonUpdater, createPersonUpdaterFromEnv } from '../person-updater/index'
 import { PersonRepository, PersonUpdater } from '../types'
 import { tryCreateMongoPersonRepositoryFromEnv } from './mongo/mongo-person-repository'
 
-export const createPersonRepositoryFromEnv = (updater: PersonUpdater = createDefaultPersonUpdater()): PersonRepository => 
+export const createPersonRepositoryFromEnv = (updater: PersonUpdater = createPersonUpdaterFromEnv()): PersonRepository => 
 	tryCreateMongoPersonRepositoryFromEnv(updater) || createPersonRepositoryInMemory({}, updater)
 
 export const createPersonRepositoryInMemory = (db: object, updater: PersonUpdater = createDefaultPersonUpdater()): PersonRepository => ({

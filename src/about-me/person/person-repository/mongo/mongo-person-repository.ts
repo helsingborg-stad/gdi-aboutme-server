@@ -26,7 +26,7 @@ interface Connection {
 const connect = async ({ uri, dbName = 'aboutme', collectionName = 'persons' }: MongoRepositoryConfiguration): Promise<Connection> => {
 	const client = new MongoClient(uri)
 	const db = await client.db(dbName)
-	await db.collection(collectionName).createIndex({ id: 1 }, { unique: true })
+	await db.collection(collectionName).createIndex({ id: 1 }, { unique: true, name: 'unique_index__id' })
 	return {
 		client,
 		db,

@@ -3,7 +3,7 @@ import request from 'supertest'
 import { createAuthorizationHeadersFor, createTestApp } from './test-utils'
 
 describe('/aboutme/graphql', () => {
-	it.only('gives 401 if no bearer token is supplied', () => createTestApp().run(
+	it('gives 401 if no bearer token is supplied', () => createTestApp().run(
 		async server => {
 			const { status } = await request(server)
 				.post('/api/v1/aboutme/graphql')

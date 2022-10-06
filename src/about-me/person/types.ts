@@ -3,15 +3,24 @@ export interface Email {
 	isVerified: boolean
 	verifiedDate: string
 }
+
+export interface Phone {
+	number: string
+	isVerified: boolean
+	verifiedDate: string
+}
+
 export interface Person {
 	id: string
 	firstName?: string
 	lastName?: string
 	email?: Email
+	phone?: Phone
 }
 
 export interface PersonInput {
-	email: string
+	email?: string|null
+	phoneNumber?: string|null
 }
 
 export interface PersonRepository {

@@ -11,9 +11,15 @@ export const createAboutMe = (services: AboutMeServices): GraphQLModule => ({
 
 		input PersonInput {
 			email: String
+			phoneNumber: String
 		}
 		type PersonEmail {
 			address: String!,
+			isVerified: Boolean!,
+			verifiedDate: Date
+		}
+		type PersonPhone {
+			number: String!,
 			isVerified: Boolean!,
 			verifiedDate: Date
 		}
@@ -23,6 +29,7 @@ export const createAboutMe = (services: AboutMeServices): GraphQLModule => ({
 			firstName: String,
 			lastName: String,
 			email: PersonEmail
+			phone: PersonPhone
 		}
 		type Query {
 			me: Person
