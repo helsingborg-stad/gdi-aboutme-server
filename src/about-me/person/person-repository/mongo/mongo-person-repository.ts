@@ -4,12 +4,17 @@ import { Person, PersonRepository, PersonUpdater } from '../../types'
 
 export const tryCreateMongoPersonRepositoryFromEnv = (updater: PersonUpdater): PersonRepository => {
 	const uri = getEnv('MONGODB_URI',{ trim: true, fallback: '' })
-	return uri ? createMongoPersonRepository({ uri }, updater) : null
+	return uri ? createMongoPersonRepository({ 
+		uri,
+		dbName: getEnv('MONGODB_DB',{ trim: true, fallback: 'aboutme' }),
+		collectionName: getEnv('MONGODB_COLLECTION',{ trim: true, fallback: 'persons' }),
+	}, updater) : null
 }
 
 export interface MongoRepositoryConfiguration {
-	uri: string,
+	uri: string
 	dbName?: string
+	collectionName?: string
 }
 
 interface Connection {
@@ -17,10 +22,11 @@ interface Connection {
 	db: Db,
 	collection: Collection
 }
-const connect = async ({ uri, dbName = 'aboutme' }: MongoRepositoryConfiguration): Promise<Connection> => {
+
+const connect = async ({ uri, dbName = 'aboutme', collectionName = 'persons' }: MongoRepositoryConfiguration): Promise<Connection> => {
 	const client = new MongoClient(uri)
 	const db = await client.db(dbName)
-	await db.collection('persons').createIndex({ id: 1 })
+	await db.collection(collectionName).createIndex({ id: 1 }, { unique: true })
 	return {
 		client,
 		db,
@@ -28,7 +34,6 @@ const connect = async ({ uri, dbName = 'aboutme' }: MongoRepositoryConfiguration
 	}
 }
 export const createMongoPersonRepository = (config: MongoRepositoryConfiguration, updater: PersonUpdater): PersonRepository => {
-	console.log({ config })
 	const c = connect(config)
 	const withCollection = <T>(handler: (collection: Collection) => Promise<T>): Promise<T> => c.then(({ collection }) => handler(collection))
 
