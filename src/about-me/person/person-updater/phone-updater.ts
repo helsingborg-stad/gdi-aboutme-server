@@ -1,4 +1,3 @@
-// import * as libphonenumberJs from 'libphonenumber-js'
 import { getEnv } from '@helsingborg-stad/gdi-api-node'
 import { parsePhoneNumber } from 'awesome-phonenumber'
 import { PersonUpdater, Phone } from '../types'
@@ -11,9 +10,6 @@ export const createPhoneUpdater = (regionCode: string): PersonUpdater => ({
 		phone: patchPhone(person?.phone, getValidatedPhoneNumber(update?.phoneNumber?.trim(), regionCode)),
 	}),
 })
-
-
-// const getValidatedPhoneNumber = (number: string, regionCode: string): string => (typeof number === 'string') ? parsePhoneNumber(number, regionCode).getNumber('e164'): null
 
 const getValidatedPhoneNumber = (number: string, regionCode: string): string => {
 	const parsed = parsePhoneNumber(number || '', regionCode)
