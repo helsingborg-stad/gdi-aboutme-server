@@ -17,8 +17,6 @@ export const createPhoneUpdater = (regionCode: string): PersonUpdater => ({
 
 const getValidatedPhoneNumber = (number: string, regionCode: string): string => {
 	const parsed = parsePhoneNumber(number || '', regionCode)
-
-	console.log({ number, parsed, regionCode })
 	return parsed?.isPossible() && parsed?.getNumber('e164')
 }
 
