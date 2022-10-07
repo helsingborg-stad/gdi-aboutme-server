@@ -15,7 +15,7 @@ describe('phoneUpdater', () => {
 					verifiedDate: '2020-02-02',
 				},
 			}),
-			{ phone: '072 12345678' })
+			{ phoneNumber: '072 12345678' })
 
 		expect(updated).toMatchObject({
 			phone: {
@@ -31,7 +31,7 @@ describe('phoneUpdater', () => {
 		[''],
 		['bad number'],
 		['123'],
-	])('ignores update on invalid number "%s"', async phone => {
+	])('ignores update on invalid number "%s"', async phoneNumber => {
 		const updater = createPhoneUpdater('SE')
 
 		const initialPhone: Phone = {
@@ -44,7 +44,7 @@ describe('phoneUpdater', () => {
 			makePerson({ 
 				phone: initialPhone,
 			}),
-			{ phone })
+			{ phoneNumber })
 
 		expect(updated).toMatchObject({
 			phone: initialPhone,
@@ -64,7 +64,7 @@ describe('phoneUpdater', () => {
 			makePerson({ 
 				phone: initialPhone,
 			}),
-			{ phone: 'badly formattted phone number' })
+			{ phoneNumber: 'badly formattted phone number' })
 
 		expect(updated).toMatchObject({
 			phone: initialPhone,
