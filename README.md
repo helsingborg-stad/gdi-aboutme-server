@@ -25,10 +25,8 @@
     <img src="docs/images/hbg-github-logo-combo.png" alt="Logo" width="300">
   </a>
 </p>
-<h1>GDI Template</h1>
+<h1>GDI About Me Server</h1>
 <p>
-  Template repository for GDI services.
-  <br />
   <a href="https://github.com/helsingborg-stad/gdi-aboutme-server/issues">Report Bug</a>
   ·
   <a href="https://github.com/helsingborg-stad/gdi-aboutme-server/issues">Request Feature</a>
@@ -68,6 +66,10 @@
 About Me services for GDI.
 
 - GraphQL endpoint for queries and mutations for me as authenticated citizen.
+- Validation of email through https://github.com/manishsaraan/email-validator
+- Validation of phone numbers through https://github.com/grantila/awesome-phonenumber#readme
+  - uses precompiled version of Google's ```libphonenumber```
+  - phonenumbers are stored in [E.164](https://en.wikipedia.org/wiki/E.164) format (example: +46721234567).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
