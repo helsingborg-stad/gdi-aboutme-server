@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto'
 import * as EmailValidator from 'email-validator'
 import { Email, PersonUpdater } from '../types'
 
@@ -13,5 +14,6 @@ const patchEmail = (email?: Email, update?: string): Email | null => update && E
 		address: update,
 		isVerified: false,
 		verifiedDate: null,
+		verificationCode: randomUUID(),
 	})
 	: email

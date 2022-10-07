@@ -3,7 +3,7 @@ import { createAboutMeApp } from '../../aboutme-app'
 import { createAuthorizationService } from '@helsingborg-stad/gdi-api-node'
 import { Application } from '@helsingborg-stad/gdi-api-node'
 import { AboutMeServices } from '../../types'
-import { createPersonRepositoryInMemory } from '../person/person-repository'
+import { createInMemoryPersonRepository } from '../person/repositories'
 
 const TEST_SHARED_SCERET = 'a shared secret for the tests in this file'
 
@@ -24,7 +24,7 @@ export const createTestApp = (services: Partial<AboutMeServices> = {}): Applicat
 	validateResponse: true,
 	services: createTestServices({
 		authorization: createAuthorizationService(TEST_SHARED_SCERET),
-		persons: createPersonRepositoryInMemory({}),
+		persons: createInMemoryPersonRepository({}),
 		...services,
 	}),
 })

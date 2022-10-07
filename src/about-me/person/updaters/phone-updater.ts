@@ -1,8 +1,9 @@
 import { getEnv } from '@helsingborg-stad/gdi-api-node'
 import { parsePhoneNumber } from 'awesome-phonenumber'
+import { randomUUID } from 'crypto'
 import { PersonUpdater, Phone } from '../types'
 
-export const createPhoneUpdaterFromEnv = (): PersonUpdater => createPhoneUpdater(getEnv('PHONENUMBER_REGION', { fallback: 'SE' }))
+export const createPhoneUpdaterFromEnv = (regionCode = 'SE'): PersonUpdater => createPhoneUpdater(getEnv('PHONENUMBER_REGION', { fallback: regionCode }))
 
 export const createPhoneUpdater = (regionCode: string): PersonUpdater => ({
 	updatePerson: async (person, update) => ({
@@ -21,5 +22,6 @@ const patchPhone = (phone?: Phone, update?: string): Phone | null => update && (
 		number: update,
 		isVerified: false,
 		verifiedDate: null,
+		verificationCode: randomUUID(),
 	})
 	: phone
