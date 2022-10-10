@@ -4,8 +4,8 @@ This project is tested against MongoDB with the following assumptions:
 
 - `MONGODB_URI` should be set to `mongodb://[]host]:[port]/[db]` as in `mongodb://127.0.0.1:27017/aboutme`
 
-## Enable notifications over AMQP
-To enable change notifications over AMQP, our environment should contain
+## Enabling MongoDB
+Your environment should contain
 
 ```sh
 MONGODB_URI=mongodb://...
