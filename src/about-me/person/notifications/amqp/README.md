@@ -2,7 +2,7 @@
 
 This project is tested against RabbitMQ with the following assumptions:
 
-- AMQP notifications are enbaled only if both `AMQP_URI` and `AMQP_EXCHANGE` are defined
+- AMQP notifications are enabled only if both `AMQP_URI` and `AMQP_EXCHANGE` are defined
 - The exchange `AMQP_EXCHANGE` is created if missing type `type='topic'` 
 - Mail change notifications are sent with `topic` set to `AMQP_TOPIC_NOTIFY_EMAIL`
   - content type is 'application/json'
