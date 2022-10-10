@@ -1,35 +1,35 @@
-import { Email, Person, PersonNotifier, PersonUpdater } from '../../types'
-import { createNotifyEmailChangedUpdater } from '../notify-email-changed-updater'
+import { Person, PersonNotifier, PersonUpdater, Phone } from '../../types'
+import { createNotifyPhoneChangedUpdater } from '../notify-phone-changed-updater'
 
 const notImplemented = () => { throw new Error('not implemented') }
 
 describe('notifyEmailChangedUpdater', () => {
 
-	const captureLogFromUpdates = async (initialPerson: Person, updatedPerson: Person): Promise<Email[]> => {
-		const nofificationLog: Email[] = []
+	const captureLogFromUpdates = async (initialPerson: Person, updatedPerson: Person): Promise<Phone[]> => {
+		const nofificationLog: Phone[] = []
 		const fakeUpdater: PersonUpdater = {
 			updatePerson: async (): Promise<Person> => updatedPerson, 
 		}
 		const fakeNotifier: PersonNotifier = {
-			notifyEmailChanged: async (email: Email) => nofificationLog.push(email),
-			notifyPhoneChanged: notImplemented,
+			notifyEmailChanged: notImplemented,
+			notifyPhoneChanged:async (phone: Phone) => nofificationLog.push(phone),
 		}
-		const updater = createNotifyEmailChangedUpdater(fakeUpdater, fakeNotifier)
+		const updater = createNotifyPhoneChangedUpdater(fakeUpdater, fakeNotifier)
 		await updater.updatePerson(initialPerson, {})
 		return nofificationLog
 	}
 
 
 
-	it('notifies when email is added', async () => {
+	it('notifies when phone number is added', async () => {
 		const log = await captureLogFromUpdates(
 			{
 				id: 'test-person-123',
 			},
 			{
 				id: 'test-person-123',
-				email: {
-					address: 'a@b.com',
+				phone: {
+					number: '+46721234567',
 					isVerified: false,
 					verificationCode: 'vc-1234',
 				},
@@ -37,24 +37,24 @@ describe('notifyEmailChangedUpdater', () => {
 		)
 		expect(log).toMatchObject([
 			{
-				address: 'a@b.com',
+				number: '+46721234567',
 				verificationCode: 'vc-1234',
 			},
 		])
 	})
 
-	it('notifies when email is changed', async () => {
+	it('notifies when phone number is changed', async () => {
 		const log = await captureLogFromUpdates(
 			{
 				id: 'test-person-123',
-				email: {
-					address: 'to@be.replaced',
+				phone: {
+					number: '000-111',
 				},
 			},
 			{
 				id: 'test-person-123',
-				email: {
-					address: 'a@b.com',
+				phone: {
+					number: '+46721234567',
 					isVerified: false,
 					verificationCode: 'vc-1234',
 				},
@@ -62,12 +62,12 @@ describe('notifyEmailChangedUpdater', () => {
 		)
 		expect(log).toMatchObject([
 			{
-				address: 'a@b.com',
+				number: '+46721234567',
 				verificationCode: 'vc-1234',
 			},
 		])
 	})
-	it('does nothing if mail is not set', async () => {
+	it('does nothing if phone number is not set', async () => {
 		const log = await captureLogFromUpdates(
 			{
 				id: 'test-person-123',
@@ -79,18 +79,18 @@ describe('notifyEmailChangedUpdater', () => {
 		expect(log).toHaveLength(0)
 	})
 
-	it('does nothing is mail is unchanged', async () => {
+	it('does nothing is phone number is unchanged', async () => {
 		const log = await captureLogFromUpdates(
 			{
 				id: 'test-person-123',
-				email: {
-					address: 'a@b.com',
+				phone: {
+					number: '+721234567',
 				},
 			},
 			{
 				id: 'test-person-123',
-				email: {
-					address: 'a@b.com',
+				phone: {
+					number: '+721234567',
 					isVerified: false,
 					verificationCode: 'vc-1234',
 				},
@@ -98,18 +98,18 @@ describe('notifyEmailChangedUpdater', () => {
 		)
 		expect(log).toHaveLength(0)
 	})
-	it('does nothing if new mail is verified', async () => {
+	it('does nothing if new phone number is verified', async () => {
 		const log = await captureLogFromUpdates(
 			{
 				id: 'test-person-123',
-				email: {
-					address: 'a@b.com',
+				phone: {
+					number: '+721234567',
 				},
 			},
 			{
 				id: 'test-person-123',
-				email: {
-					address: 'updated@b.com',
+				phone: {
+					number: '+721234567',
 					isVerified: true,
 					verificationCode: 'vc-1234',
 				},
@@ -121,14 +121,14 @@ describe('notifyEmailChangedUpdater', () => {
 		const log = await captureLogFromUpdates(
 			{
 				id: 'test-person-123',
-				email: {
-					address: 'a@b.com',
+				phone: {
+					number: '000-111',
 				},
 			},
 			{
 				id: 'test-person-123',
-				email: {
-					address: 'updated@b.com',
+				phone: {
+					number: '+721234567',
 					isVerified: false,
 					verificationCode: '',
 				},

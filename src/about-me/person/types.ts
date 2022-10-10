@@ -36,4 +36,5 @@ export interface PersonUpdater {
 
 export interface PersonNotifier {
 	notifyEmailChanged: (email: Email) => Promise<any>
+	notifyPhoneChanged: (phone: Phone) => Promise<any>
 }

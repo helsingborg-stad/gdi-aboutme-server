@@ -1,10 +1,11 @@
-import { Email, PersonNotifier } from '../../types'
+import { Email, PersonNotifier, Phone } from '../../types'
 import { AmqpSession, createAmqpSession } from './amqp-session'
 import { AmqpConfiguration } from './types'
 
 
-const createPersonNotifierOnAmqpSession = ({ notifyEmailTopic }: AmqpConfiguration, session: AmqpSession): PersonNotifier => ({
+const createPersonNotifierOnAmqpSession = ({ notifyEmailTopic, notifyPhoneTopic }: AmqpConfiguration, session: AmqpSession): PersonNotifier => ({
 	notifyEmailChanged: (email: Email) => session.publish(notifyEmailTopic, email),
+	notifyPhoneChanged: (phone: Phone) => session.publish(notifyPhoneTopic, phone),
 })	
 
 /**

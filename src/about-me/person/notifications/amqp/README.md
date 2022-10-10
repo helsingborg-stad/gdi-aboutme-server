@@ -7,6 +7,9 @@ This project is tested against RabbitMQ with the following assumptions:
 - Mail change notifications are sent with `topic` set to `AMQP_TOPIC_NOTIFY_EMAIL`
   - content type is 'application/json'
   - payload is `{address: [email], verificationCode: [code]}`
+- Phone number change notifications are sent with `topic` set to `AMQP_TOPIC_NOTIFY_PHONE`
+  - content type is 'application/json'
+  - payload is `{number: [phone number], verificationCode: [code]}`
 
 
 ## Enable notifications over AMQP
@@ -18,7 +21,7 @@ AMQP_EXCHANGE=...
 
 # optional with defaults
 # AMQP_TOPIC_NOTIFY_EMAIL=notify.email
-# AMQP_TOPIC_NOTIFY_PHONE=notify.email
+# AMQP_TOPIC_NOTIFY_PHONE=notify.phone
 ```
 
 ## Local environment with docker

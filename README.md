@@ -49,6 +49,7 @@
         <li><a href="#prerequisites">Prerequisites</a></li>
 				<li><a href="#configure-environment-variables">Configure environment variables</a></li>
 				<li><a href="#graphql-explorer">GraphQL explorer</a></li>
+        <li><a href="#integrations">Integrations</a></li>
       </ul>
     </li>
     <li><a href="#roadmap">Roadmap</a></li>
@@ -120,6 +121,9 @@ Assuming you have configured a fallback user (thus not requiring a JWT Bearer to
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## Integrations
+
+- [Change publication to AMQP](src/about-me/person/notifications/amqp/README.md)
 ## Roadmap
 
 - [ ] Expand model
