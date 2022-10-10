@@ -61,4 +61,18 @@ describe('mongoPersonRepository', () => {
 			},
 		})
 	})
+
+	it('can be updated', async () => {
+		const repo = createTestRepo()
+		await repo.updatePerson('test-person-123', { email: 'a@b.com' })
+		await repo.updatePerson('test-person-123', { email: 'updated-a@b.com' })
+
+		const p = await repo.getPerson('test-person-123')
+		expect(p).toMatchObject({
+			id: 'test-person-123',
+			email: {
+				address: 'updated-a@b.com',
+			},
+		})
+	})
 })

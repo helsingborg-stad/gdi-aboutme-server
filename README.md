@@ -123,11 +123,13 @@ Assuming you have configured a fallback user (thus not requiring a JWT Bearer to
 
 ## Integrations
 
+- [MongoDB persistence](src/about-me/person/repositories/mongo/README.md)
 - [Change publication to AMQP](src/about-me/person/notifications/amqp/README.md)
 ## Roadmap
 
 - [ ] Expand model
-- [ ] Support MongoDB as master
+- [X] Support MongoDB as master
+- [X] Change notifications via AMQP
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

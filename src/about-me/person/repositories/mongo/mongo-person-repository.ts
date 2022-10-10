@@ -47,7 +47,8 @@ export const createMongoPersonRepository = (config: MongoRepositoryConfiguration
 				id,
 				...(found || knownFromElsewhere?.()),
 			}, update)
-			await (found ? collection.replaceOne({ id }, updated) : collection.insertOne(updated))
+			// await (found ? collection.replaceOne({ id }, updated) : collection.insertOne(updated))
+			await (found ? collection.updateOne({ id }, { $set: updated }) : collection.insertOne(updated))
 			return (await collection.findOne({ id })) as unknown as Person
 		}),
 		inspect: handler => withConnection(handler),
