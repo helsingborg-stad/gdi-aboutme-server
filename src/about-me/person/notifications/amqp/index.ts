@@ -11,8 +11,8 @@ export { createAmqpPersonNotifier }
 export const tryCreateAmqpPersonNotifierFromEnv = (): PersonNotifier => {
 	const uri = getEnv('AMQP_URI', { trim: true, fallback: '' })
 	const exchange = getEnv('AMQP_EXCHANGE', { trim: true, fallback: '' })
-	const notifyEmailTopic = getEnv('AMQP_NOTIFY_EMAIL_TOPIC', { trim: true, fallback: 'notify.email' })
-	const notifyPhoneTopic = getEnv('AMQP_NOTIFY_PHONE_TOPIC', { trim: true, fallback: 'notify.phone' })
+	const notifyEmailTopic = getEnv('AMQP_TOPIC_EMAIL_CHANGED ', { trim: true, fallback: 'email.changed' })
+	const notifyPhoneTopic = getEnv('AMQP_TOPIC_PHONE_CHANGED', { trim: true, fallback: 'phone.changed' })
 	if (uri && exchange) {
 		return createAmqpPersonNotifier({ uri, exchange, notifyEmailTopic, notifyPhoneTopic })
 	}

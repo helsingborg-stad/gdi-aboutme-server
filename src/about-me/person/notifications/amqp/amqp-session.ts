@@ -4,7 +4,7 @@ import { AmqpConfiguration } from './types'
 const debug = Debug('application:amqp-session')
 
 export interface AmqpApi {
-	publish: (topic: string, payload: any) => Promise<any> 
+	publish: <T>(topic: string, payload: T) => Promise<any> 
 }
 
 export type AmqpApiHandler = (api: AmqpApi) => Promise<any>

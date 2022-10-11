@@ -6,11 +6,11 @@ This project is tested against RabbitMQ with the following assumptions:
 - The exchange `AMQP_EXCHANGE` is created if missing type `type='topic'` 
 - Mail change notifications are sent with `topic` set to `AMQP_TOPIC_NOTIFY_EMAIL`
   - content type is 'application/json'
-  - payload is `{address: [email], verificationCode: [code]}`
+  - payload is `{address: [email], verificationCode: [code], ...}`
 - Phone number change notifications are sent with `topic` set to `AMQP_TOPIC_NOTIFY_PHONE`
   - content type is 'application/json'
-  - payload is `{number: [phone number], verificationCode: [code]}`
-
+  - payload is `{number: [phone number], verificationCode: [code], ...}`
+- [types.ts](types.ts) describes message formats  
 
 ## Enable notifications over AMQP
 To enable change notifications over AMQP, our environment should contain
@@ -20,13 +20,13 @@ AMQP_URI=amqp://...
 AMQP_EXCHANGE=...
 
 # optional with defaults
-# AMQP_TOPIC_NOTIFY_EMAIL=notify.email
-# AMQP_TOPIC_NOTIFY_PHONE=notify.phone
+# AMQP_TOPIC_EMAIL_CHANGED=email.changed
+# AMQP_TOPIC_PHONE_CHANGED=phone.changed
 ```
 
 ## Local environment with docker
 
-Start a dpockerized RabitMQ with
+Start a dockerized RabitMQ with
 ``` sh
 $ docker run -d --hostname my-rabbit --name some-rabbit -p 5672:5672 -p 888:15672 -e RABBITMQ_DEFAULT_USER=user -e RABBITMQ_DEFAULT_PASS=password rabbitmq:3-management
 ```

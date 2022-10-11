@@ -1,11 +1,11 @@
 import { Email, PersonNotifier, Phone } from '../../types'
 import { AmqpSession, createAmqpSession } from './amqp-session'
-import { AmqpConfiguration } from './types'
+import { AmqpConfiguration, EmailChangedMessage, PhoneChangedMessage } from './types'
 
 
 const createPersonNotifierOnAmqpSession = ({ notifyEmailTopic, notifyPhoneTopic }: AmqpConfiguration, session: AmqpSession): PersonNotifier => ({
-	notifyEmailChanged: ({ address, verificationCode }: Email) => session.publish(notifyEmailTopic, { address, verificationCode }),
-	notifyPhoneChanged: ({ number, verificationCode }: Phone) => session.publish(notifyPhoneTopic, { number, verificationCode }),
+	notifyEmailChanged: ({ address, verificationCode, isVerified, verifiedDate }: Email) => session.publish<EmailChangedMessage>(notifyEmailTopic, { address, verificationCode, isVerified, verifiedDate }),
+	notifyPhoneChanged: ({ number, verificationCode, isVerified, verifiedDate }: Phone) => session.publish<PhoneChangedMessage>(notifyPhoneTopic, { number, verificationCode, isVerified, verifiedDate }),
 })	
 
 /**
