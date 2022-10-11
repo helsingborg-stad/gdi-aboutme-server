@@ -36,4 +36,12 @@ $ docker run -d --hostname my-rabbit --name some-rabbit -p 5672:5672 -p 888:1567
 AMQP_EXCHANGE=gdi-about-me-person-changed
  ``` 
 
+[example-amqp-listener](../../../../../example-amqp-listener.js) is a small utility for logging events to console.
+```sh
+$ # in project root
+$ node example-amqp-listener.js
+```
+
  When mutating a person (through GraphQL), events should be published to the exchange `gdi-about-me-person-changed`.
+
+ 
