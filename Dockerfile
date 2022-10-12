@@ -1,9 +1,11 @@
 # Builder image
 FROM node:18 as builder
 
+ARG GITHUB_ACCESS_TOKEN
+
 WORKDIR /usr/src/app
 
-COPY yarn.lock tsconfig.json package*.json *.yml ./
+COPY yarn.lock tsconfig.json package*.json .npmrc *.yml ./
 COPY src ./src
 
 RUN yarn install && yarn build
@@ -12,7 +14,11 @@ RUN yarn install && yarn build
 
 FROM node:18-alpine	as deps
 
+ARG GITHUB_ACCESS_TOKEN
+
 WORKDIR /deps
+
+COPY .npmrc .
 COPY package.json .
 COPY yarn.lock .
 RUN yarn install --production --ignore-optional
