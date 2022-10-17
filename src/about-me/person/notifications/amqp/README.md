@@ -28,7 +28,7 @@ AMQP_EXCHANGE=...
 
 Start a dockerized RabitMQ with
 ``` sh
-$ docker run -d --hostname my-rabbit --name some-rabbit -p 5672:5672 -p 888:15672 -e RABBITMQ_DEFAULT_USER=user -e RABBITMQ_DEFAULT_PASS=password rabbitmq:3-management
+docker run -d --hostname my-rabbit --name some-rabbit -p 5672:5672 -p 888:15672 -e RABBITMQ_DEFAULT_USER=user -e RABBITMQ_DEFAULT_PASS=password rabbitmq:3-management
 ```
  Ensure `.env` contains
  ```env
