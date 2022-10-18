@@ -11,4 +11,5 @@ export const createInMemoryPersonRepository = (db: object, updater: PersonUpdate
 			db[id] = person
 			return person
 		}),
+	checkHealth: async () => true,
 })

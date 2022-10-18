@@ -28,6 +28,7 @@ export interface PersonInput {
 export interface PersonRepository {
 	getPerson: (id: string, knownFromElseWhere?: () => Person) => Promise<Person>
 	updatePerson: (id: any, update: PersonInput, knownFromElseWhere?: () => Partial<Person>) => Promise<Person>
+	checkHealth: () => Promise<boolean>
 }
 
 export interface PersonUpdater {

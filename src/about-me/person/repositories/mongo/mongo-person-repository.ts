@@ -51,6 +51,7 @@ export const createMongoPersonRepository = (config: MongoRepositoryConfiguration
 			await (found ? collection.updateOne({ id }, { $set: updated }) : collection.insertOne(updated))
 			return (await collection.findOne({ id })) as unknown as Person
 		}),
+		checkHealth: async () => withConnection(async ({ collection }) => collection.findOne({ id: 'id-for-healthcheck-purposes' })).then(() => true),
 		inspect: handler => withConnection(handler),
 	}
 }

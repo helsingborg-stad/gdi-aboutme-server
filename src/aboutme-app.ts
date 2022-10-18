@@ -8,6 +8,8 @@ import { Application } from '@helsingborg-stad/gdi-api-node/application'
 import { AboutMeServices } from './types'
 import { fallbackUserModule } from './about-me/fallback-user-module/index'
 import { aboutMeGraphQLModule } from './about-me/about-me-graphql-module'
+import { createHealthCheckFromServices } from './about-me/health-check/create-health-check-from-services'
+
 
 /** Create fully packaged About Me web application, given dependencies */
 export const createAboutMeApp = ({ services, validateResponse }: {services: AboutMeServices, validateResponse?: boolean}): Application =>
@@ -19,5 +21,5 @@ export const createAboutMeApp = ({ services, validateResponse }: {services: Abou
 		.use(swaggerModule())
 		.use(jwtUserModule(services.authorization))
 		.use(fallbackUserModule())
-		.use(healthCheckModule())
+		.use(healthCheckModule(createHealthCheckFromServices(services)))
 		.use(aboutMeGraphQLModule(services))
