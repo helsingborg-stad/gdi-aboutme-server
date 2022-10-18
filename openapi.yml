@@ -63,3 +63,6 @@ components:
       type: object
       properties:
         data:
+          type: object
+
+
