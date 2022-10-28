@@ -18,7 +18,7 @@ MONGODB_URI=mongodb://...
 
 Start a dockerized MongoDB with
 ```sh
-docker run --name mongodb -p 21017:21017 -d mongo
+docker run --name mongodb -p 27017:27017 -d mongo
 
 ```
  Ensure `.env` contains
