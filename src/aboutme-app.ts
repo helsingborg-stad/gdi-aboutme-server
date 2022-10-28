@@ -7,8 +7,9 @@ import { webFrameworkModule } from '@helsingborg-stad/gdi-api-node'
 import { Application } from '@helsingborg-stad/gdi-api-node/application'
 import { AboutMeServices } from './types'
 import { fallbackUserModule } from './about-me/fallback-user-module/index'
-import { aboutMeGraphQLModule } from './about-me/about-me-graphql-module'
+import { aboutMeGraphQLModule } from './about-me/graphql/about-me-graphql-module'
 import { createHealthCheckFromServices } from './about-me/health-check/create-health-check-from-services'
+import { aboutMeVerificationModule } from './about-me/verification/about-me-verification-module'
 
 
 /** Create fully packaged About Me web application, given dependencies */
@@ -23,3 +24,4 @@ export const createAboutMeApp = ({ services, validateResponse }: {services: Abou
 		.use(fallbackUserModule())
 		.use(healthCheckModule(createHealthCheckFromServices(services)))
 		.use(aboutMeGraphQLModule(services))
+		.use(aboutMeVerificationModule(services))

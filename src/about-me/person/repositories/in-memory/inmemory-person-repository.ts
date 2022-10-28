@@ -11,5 +11,22 @@ export const createInMemoryPersonRepository = (db: object, updater: PersonUpdate
 			db[id] = person
 			return person
 		}),
+	verifyEmail: async verificationCode => {
+		const found = Object.values(db).find(p => p.email?.verificationCode === verificationCode)
+		if (found) {
+			found.email.isVerified = true
+			found.email.verifiedDate = new Date()
+		}
+		return found
+	},
+	verifyPhone: async verificationCode => {
+		const found = Object.values(db).find(p => p.phone?.verificationCode === verificationCode)
+		if (found) {
+			found.phone.isVerified = true
+			found.phone.verifiedDate = new Date()
+		}
+		return found
+
+	},
 	checkHealth: async () => true,
 })

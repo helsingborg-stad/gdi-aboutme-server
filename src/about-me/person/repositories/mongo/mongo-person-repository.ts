@@ -7,22 +7,29 @@ export interface MongoPersonRepository extends PersonRepository {
 export interface MongoRepositoryConfiguration {
 	uri: string
 	collectionName?: string
+	// TODO:testMode is a technical debth introduced to solve that our current mongodb mock doesnt support sparse indices
+	//a dn that we want to skip creation of such in tests
+	testMode?: boolean
+	
 }
 
 type MongoClientFactory = (url: string, options?: MongoClientOptions) => Promise<MongoClient>
 
 interface Connection {
 	client: MongoClient
-	db: Db,
+	db: Db
 	collection: Collection
 }
 
 const defaultMongoClientFactory: MongoClientFactory = (url, options) => MongoClient.connect(url, options)
 
-const connect = async ({ uri, collectionName = 'persons' }: MongoRepositoryConfiguration, clientFactory: MongoClientFactory = defaultMongoClientFactory): Promise<Connection> => {
+const connect = async ({ uri, collectionName = 'persons', testMode = false }: MongoRepositoryConfiguration, clientFactory: MongoClientFactory = defaultMongoClientFactory): Promise<Connection> => {
 	const client = await clientFactory(uri)
 	const db = await client.db()
 	await db.collection(collectionName).createIndex({ id: 1 }, { unique: true, name: 'unique_index__id' })
+
+	testMode || await db.collection(collectionName).createIndex({ 'email.verificationCode': 1 }, { unique: true, sparse: true, name: 'index__email_verification_code' })
+	testMode || await db.collection(collectionName).createIndex({ 'phone.verificationCode': 1 }, { unique: true, sparse: true, name: 'index__phone_verification_code' })
 	return {
 		client,
 		db,
@@ -50,6 +57,12 @@ export const createMongoPersonRepository = (config: MongoRepositoryConfiguration
 			// await (found ? collection.replaceOne({ id }, updated) : collection.insertOne(updated))
 			await (found ? collection.updateOne({ id }, { $set: updated }) : collection.insertOne(updated))
 			return (await collection.findOne({ id })) as unknown as Person
+		}),
+		verifyEmail: (verificationCode) => withConnection(async ({ collection }) => {
+			return null
+		}),
+		verifyPhone: (verificationCode) => withConnection(async ({ collection }) => {
+			return null
 		}),
 		checkHealth: async () => withConnection(async ({ collection }) => collection.findOne({ id: 'id-for-healthcheck-purposes' })).then(() => true),
 		inspect: handler => withConnection(handler),

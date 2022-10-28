@@ -5,12 +5,10 @@ import { createMongoPersonRepository, MongoPersonRepository } from '../mongo-per
 import { createDefaultPersonUpdater } from '../../../updaters'
 import { randomUUID } from 'crypto'
 
-const URI = 'mongodb://fake-test-host:27017/test-about-me'
+// We create a mocked mongodb
+const createMongoClient = (uri) => MongoClient.connect(uri)
 
-const createMongoClient = (uri = URI) => MongoClient.connect(uri)
-
-// const testRepo: MongoPersonRepository = null as unknown as MongoPersonRepository
-
+// keep track of repos so we can close them
 const testRepositories: MongoPersonRepository[] = []
 
 afterAll(async () => {
@@ -26,6 +24,7 @@ const registerTestRepo = (repo: MongoPersonRepository): MongoPersonRepository =>
 const createTestRepo = () => registerTestRepo(createMongoPersonRepository({
 	uri: `mongodb://fake-test-host-${randomUUID()}:27017/test-about-me${randomUUID()}`,
 	collectionName: 'persons',
+	testMode: true,
 }, createDefaultPersonUpdater(),
 (url) => createMongoClient(url)))
 

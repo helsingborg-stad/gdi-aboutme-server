@@ -3,7 +3,7 @@ import { makeGqlMiddleware } from '@helsingborg-stad/gdi-api-node/graphql'
 import { GraphQLModule } from '@helsingborg-stad/gdi-api-node/graphql'
 import { requireJwtUser } from '@helsingborg-stad/gdi-api-node/modules/jwt-user'
 import { ApplicationContext, ApplicationModule } from '@helsingborg-stad/gdi-api-node/application'
-import { AboutMeServices } from '../types'
+import { AboutMeServices } from '../../types'
 
 export const createAboutMe = (services: AboutMeServices): GraphQLModule => ({
 	schema: `

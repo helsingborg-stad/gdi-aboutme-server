@@ -1,1 +1,1 @@
-export { aboutMeGraphQLModule } from './about-me-graphql-module'
+export { aboutMeGraphQLModule } from './graphql/about-me-graphql-module'

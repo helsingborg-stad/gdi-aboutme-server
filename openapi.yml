@@ -28,7 +28,40 @@ paths:
                     type:
                       string
 
-
+  /api/v1/aboutme/verify/email/{verificationCode}:
+    get:
+      operationId: aboutMeVerifyEmail
+      summary: 'Verify email given verification code'
+      parameters:
+        - in: path
+          name: verificationCode
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerficationResponse'
+  /api/v1/aboutme/verify/phone/{verificationCode}:
+    get:
+      operationId: aboutMeVerifyPhone
+      summary: 'Verify phone given verification code'
+      parameters:
+        - in: path
+          name: verificationCode
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerficationResponse'
   /api/v1/aboutme/graphql:
     post:
       operationId: aboutMeGql
@@ -50,6 +83,11 @@ paths:
                 $ref: "#/components/schemas/GraphQLResponse"
 components:
   schemas:
+    VerficationResponse:
+      type: object
+      properties:
+        verified:
+          type: boolean
     GraphQLQuery:
       type: object
       required:

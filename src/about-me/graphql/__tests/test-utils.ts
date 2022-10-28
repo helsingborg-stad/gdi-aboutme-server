@@ -1,9 +1,9 @@
 import * as jwt from 'jsonwebtoken'
-import { createAboutMeApp } from '../../aboutme-app'
+import { createAboutMeApp } from '../../../aboutme-app'
 import { createAuthorizationService } from '@helsingborg-stad/gdi-api-node'
 import { Application } from '@helsingborg-stad/gdi-api-node'
-import { AboutMeServices } from '../../types'
-import { createInMemoryPersonRepository } from '../person/repositories'
+import { AboutMeServices } from '../../../types'
+import { createInMemoryPersonRepository } from '../../person/repositories'
 
 const TEST_SHARED_SCERET = 'a shared secret for the tests in this file'
 
@@ -16,6 +16,9 @@ export const createTestServices = (services: Partial<AboutMeServices> = {}): Abo
 	persons: {
 		getPerson: notImplemented,
 		updatePerson: notImplemented,
+		verifyEmail: notImplemented,
+		verifyPhone: notImplemented,
+		checkHealth: notImplemented,
 	},
 	...services,
 })
