@@ -13,15 +13,21 @@ export const createPhoneUpdater = (regionCode: string): PersonUpdater => ({
 })
 
 const getValidatedPhoneNumber = (number: string, regionCode: string): string => {
+	if (number === '') {
+		return ''
+	}
 	const parsed = parsePhoneNumber(number || '', regionCode)
 	return parsed?.isPossible() && parsed?.getNumber('e164')
 }
 
-const patchPhone = (phone?: Phone, update?: string): Phone | null => update && (update !== phone?.number)
-	? ({
-		number: update,
-		isVerified: false,
-		verifiedDate: null,
-		verificationCode: randomUUID(),
-	})
-	: phone
+const patchPhone = (phone?: Phone, update?: string): Phone | null => 
+	update === ''
+		? null
+		: update && (update !== phone?.number)
+			? ({
+				number: update,
+				isVerified: false,
+				verifiedDate: null,
+				verificationCode: randomUUID(),
+			})
+			: phone

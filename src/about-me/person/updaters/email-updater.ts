@@ -9,11 +9,14 @@ export const createEmailUpdater = (): PersonUpdater => ({
 	}),
 })
 
-const patchEmail = (email?: Email, update?: string): Email | null => update && EmailValidator.validate(update) && (update !== email?.address)
-	? ({
-		address: update,
-		isVerified: false,
-		verifiedDate: null,
-		verificationCode: randomUUID(),
-	})
-	: email
+const patchEmail = (email?: Email, update?: string): Email | null => 
+	update === ''
+		? null
+		: update && EmailValidator.validate(update) && (update !== email?.address)
+			? ({
+				address: update,
+				isVerified: false,
+				verifiedDate: null,
+				verificationCode: randomUUID(),
+			})
+			: email

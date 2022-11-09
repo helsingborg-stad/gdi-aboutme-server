@@ -4,6 +4,24 @@ import { createPhoneUpdater } from '../phone-updater'
 const makePerson = (patch: Partial<Person>): Person => ({ id: 'test-person', ...patch })
 
 describe('phoneUpdater', () => {
+	it('allows resetting phone number (setting to ""', async () => {
+		const updater = createPhoneUpdater('SE')
+
+		const updated = await updater.updatePerson(
+			makePerson({ 
+				phone: {
+					number: '123456789',
+					isVerified: true,
+					verifiedDate: '2020-02-02',
+				},
+			}),
+			{ phoneNumber: '' })
+
+		expect(updated).toMatchObject({
+			phone: null,
+		})
+	})
+
 	it('marks phone as unverified after update', async () => {
 		const updater = createPhoneUpdater('SE')
 
@@ -28,7 +46,6 @@ describe('phoneUpdater', () => {
 
 	it.each([
 		[null],
-		[''],
 		['bad number'],
 		['123'],
 	])('ignores update on invalid number "%s"', async phoneNumber => {
