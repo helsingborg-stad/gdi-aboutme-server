@@ -5,9 +5,33 @@ import { requireJwtUser } from '@helsingborg-stad/gdi-api-node/modules/jwt-user'
 import { ApplicationContext, ApplicationModule } from '@helsingborg-stad/gdi-api-node/application'
 import { AboutMeServices } from '../../types'
 
+
 export const createAboutMe = (services: AboutMeServices): GraphQLModule => ({
 	schema: `
 		scalar Date
+
+		type Case {
+			caseId: String
+			subjectId: String
+			publisherStatus: String
+			status: String
+			updateTime: String
+			label: String
+			description: String
+			events: [CaseEvent]
+		}
+		type CaseEvent {
+			updateTime: String
+			label: String
+			description: String
+			actions: [CaseAction]
+		}
+		type CaseAction {
+			label: String
+			url: String
+		}
+	
+
 
 		input PersonInput {
 			email: String
@@ -30,6 +54,7 @@ export const createAboutMe = (services: AboutMeServices): GraphQLModule => ({
 			lastName: String,
 			email: PersonEmail
 			phone: PersonPhone
+			cases: [Case]
 		}
 		type Query {
 			me: Person
@@ -49,6 +74,7 @@ export const createAboutMe = (services: AboutMeServices): GraphQLModule => ({
 				id,
 				type:'person',
 				...await services.persons.getPerson(id, () => ({ id, firstName, lastName })),
+				cases: async () => services.gdiCases?.listCasesBySubjectId(id) || [],
 			}),
 		},
 		Mutation: {
