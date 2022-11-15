@@ -1,7 +1,10 @@
 openapi: 3.0.0
 info:
   title: About Me
-  description: About Me services for GDI
+  description: >
+    About Me services for GDI
+
+    - Explore the graphQL endpoint via **https://cloud.hasura.io/public/graphiql?header=content-type:application/json&endpoint=http:{baseUrl}/api/v1/aboutme** (replace baseUrl with actual domain)
   version: 1.0.0
 paths:
   /api/v1/{namespace}/healthcheck:

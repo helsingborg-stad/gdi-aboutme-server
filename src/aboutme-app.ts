@@ -10,6 +10,7 @@ import { fallbackUserModule } from './about-me/fallback-user-module/index'
 import { aboutMeGraphQLModule } from './about-me/graphql/about-me-graphql-module'
 import { createHealthCheckFromServices } from './about-me/health-check/create-health-check-from-services'
 import { aboutMeVerificationModule } from './about-me/verification/about-me-verification-module'
+import { metricsModule } from './metrics/metrics-module'
 
 
 /** Create fully packaged About Me web application, given dependencies */
@@ -20,6 +21,7 @@ export const createAboutMeApp = ({ services, validateResponse }: {services: Abou
 	})
 		.use(webFrameworkModule())
 		.use(swaggerModule())
+		.use(metricsModule())
 		.use(jwtUserModule(services.authorization))
 		.use(fallbackUserModule())
 		.use(healthCheckModule(createHealthCheckFromServices(services)))
