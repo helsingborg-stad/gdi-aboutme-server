@@ -5,7 +5,8 @@ ARG GITHUB_ACCESS_TOKEN
 
 WORKDIR /usr/src/app
 
-COPY yarn.lock tsconfig.json package*.json .npmrc *.yml ./
+COPY yarn.lock tsconfig.json package*.json *.yml ./
+COPY deploy.npmrc ./.npmrc
 COPY src ./src
 
 RUN yarn install && yarn build
@@ -18,7 +19,7 @@ ARG GITHUB_ACCESS_TOKEN
 
 WORKDIR /deps
 
-COPY .npmrc .
+COPY deploy.npmrc .npmrc
 COPY package.json .
 COPY yarn.lock .
 RUN yarn install --production --ignore-optional
