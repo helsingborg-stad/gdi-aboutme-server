@@ -35,7 +35,7 @@ ENV NODE_ENV=production
 ENV PORT=80
 
 COPY --from=deps /deps/node_modules /usr/src/app/node_modules/
-COPY --from=deps /deps/package.json /usr/src/package.json
+COPY --from=deps /deps/package.json /usr/src/app/package.json
 COPY --from=builder /usr/src/app/dist ./dist
 COPY --from=builder /usr/src/app/openapi.yml /usr/src/app/openapi.yml
 
