@@ -13,22 +13,25 @@ export const createAboutMe = (services: AboutMeServices): GraphQLModule => ({
 		type Case {
 			caseId: String
 			subjectId: String
-			publisherStatus: String
-			status: String
 			updateTime: String
 			label: String
 			description: String
+			status: String
+			statusHint: String
 			events: [CaseEvent]
 		}
 		type CaseEvent {
 			updateTime: String
 			label: String
 			description: String
+			status: String
+			statusHint: String
 			actions: [CaseAction]
 		}
 		type CaseAction {
 			label: String
 			url: String
+			typeHint: String
 		}
 	
 
