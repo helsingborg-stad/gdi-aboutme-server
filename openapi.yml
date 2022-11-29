@@ -35,6 +35,8 @@ paths:
     get:
       operationId: aboutMeVerifyEmail
       summary: 'Verify email given verification code'
+      tags:
+        - Contact details verification
       parameters:
         - in: path
           name: verificationCode
@@ -52,6 +54,8 @@ paths:
     get:
       operationId: aboutMeVerifyPhone
       summary: 'Verify phone given verification code'
+      tags:
+        - Contact details verification
       parameters:
         - in: path
           name: verificationCode
