@@ -19,6 +19,7 @@ export const createAboutMe = (services: AboutMeServices): GraphQLModule => ({
 			status: String
 			statusHint: String
 			events: [CaseEvent]
+			actions: [CaseAction]
 		}
 		type CaseEvent {
 			updateTime: String
