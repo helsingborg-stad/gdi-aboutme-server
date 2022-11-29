@@ -1,3 +1,4 @@
+import { getEnterLeaveForKind } from 'graphql'
 import { MongoClient, Collection, Db, MongoClientOptions } from 'mongodb'
 import { Person, PersonRepository, PersonUpdater } from '../../types'
 
@@ -59,10 +60,27 @@ export const createMongoPersonRepository = (config: MongoRepositoryConfiguration
 			return (await collection.findOne({ id })) as unknown as Person
 		}),
 		verifyEmail: (verificationCode) => withConnection(async ({ collection }) => {
-			return null
+			await collection.updateOne(
+				{ 'email.verificationCode':verificationCode, 'email.isVerified': false },
+				{ $set: {
+					'email.isVerified': true,
+					'email.verifiedDate': new Date(),
+				} }
+			)
+			const updated = await collection.findOne({ 'email.verificationCode':verificationCode, 'email.isVerified': true })
+			return updated as unknown as Person
 		}),
 		verifyPhone: (verificationCode) => withConnection(async ({ collection }) => {
-			return null
+			await collection.updateOne(
+				{ 'phone.verificationCode':verificationCode, 'phone.isVerified': false },
+				{ $set: {
+					'phone.isVerified': true,
+					'phone.verifiedDate': new Date(),
+				} }
+			)
+			const updated = await collection.findOne({ 'phone.verificationCode':verificationCode, 'phone.isVerified': true })
+			return updated as unknown as Person
+
 		}),
 		checkHealth: async () => withConnection(async ({ collection }) => collection.findOne({ id: 'id-for-healthcheck-purposes' })).then(() => true),
 		inspect: handler => withConnection(handler),

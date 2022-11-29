@@ -74,4 +74,35 @@ describe('mongoPersonRepository', () => {
 			},
 		})
 	})
+
+	it('can have email verified', async () => {
+		const repo = createTestRepo()
+		const { email: { verificationCode, isVerified } = { verificationCode: '' } } = await repo.updatePerson('test-person-123', { email: 'a@b.com' })
+		expect(isVerified).toBeFalsy()
+		
+		const verified = await repo.verifyEmail(verificationCode as string)
+		expect(verified).toMatchObject({
+			id: 'test-person-123',
+			email: {
+				address: 'a@b.com',
+				isVerified: true,
+			},
+		})
+	} )
+
+	it('can have phone verified', async () => {
+		const repo = createTestRepo()
+		const { phone: { verificationCode, isVerified } = { verificationCode: '' } } = await repo.updatePerson('test-person-123', { phoneNumber: '+467212345678' })
+		expect(isVerified).toBeFalsy()
+		
+		const verified = await repo.verifyPhone(verificationCode as string)
+		expect(verified).toMatchObject({
+			id: 'test-person-123',
+			phone: {
+				number: '+467212345678',
+				isVerified: true,
+			},
+		})
+	} )
+
 })
