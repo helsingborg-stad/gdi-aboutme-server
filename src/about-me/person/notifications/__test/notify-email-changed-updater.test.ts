@@ -11,7 +11,7 @@ describe('notifyEmailChangedUpdater', () => {
 			updatePerson: async (): Promise<Person> => updatedPerson, 
 		}
 		const fakeNotifier: PersonNotifier = {
-			notifyEmailChanged: async (email: Email) => nofificationLog.push(email),
+			notifyEmailChanged: async (email?: Email) => (email && nofificationLog.push(email), true),
 			notifyPhoneChanged: notImplemented,
 		}
 		const updater = createNotifyEmailChangedUpdater(fakeUpdater, fakeNotifier)

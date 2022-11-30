@@ -1,4 +1,3 @@
-import { getEnterLeaveForKind } from 'graphql'
 import { MongoClient, Collection, Db, MongoClientOptions } from 'mongodb'
 import { Person, PersonRepository, PersonUpdater } from '../../types'
 
@@ -81,6 +80,14 @@ export const createMongoPersonRepository = (config: MongoRepositoryConfiguration
 			const updated = await collection.findOne({ 'phone.verificationCode':verificationCode, 'phone.isVerified': true })
 			return updated as unknown as Person
 
+		}),
+		notifyEmail: (id) => withConnection(async ({ collection }) => {
+			const found = await collection.findOne({ id }) as unknown as Person
+			return found && await updater?.notifier?.notifyEmailChanged(found?.email)
+		}),
+		notifyPhone: (id) => withConnection(async ({ collection }) => {
+			const found = await collection.findOne({ id }) as unknown as Person
+			return found && await updater?.notifier?.notifyPhoneChanged(found?.phone)
 		}),
 		checkHealth: async () => withConnection(async ({ collection }) => collection.findOne({ id: 'id-for-healthcheck-purposes' })).then(() => true),
 		inspect: handler => withConnection(handler),

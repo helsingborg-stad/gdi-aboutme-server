@@ -1,4 +1,4 @@
-import { ApplicationContext, ApplicationModule } from '@helsingborg-stad/gdi-api-node'
+import { ApplicationContext, ApplicationModule, requireJwtUser } from '@helsingborg-stad/gdi-api-node'
 import { AboutMeServices } from '../../types'
 
 
@@ -18,4 +18,14 @@ export const aboutMeVerificationModule = ({ persons }: AboutMeServices): Applica
 			verified: !!found,
 		}
 	},
+	aboutMeSendEmailVerificationNotification: requireJwtUser(async ctx => {
+		const { user: { id } } = ctx
+		const success = await persons.notifyEmail(id)
+		ctx.body = { success }
+	}),
+	aboutMeSendPhoneVerificationNotification: requireJwtUser(async ctx => {
+		const { user: { id } } = ctx
+		const success = await persons.notifyPhone(id)
+		ctx.body = { success }
+	}),
 })

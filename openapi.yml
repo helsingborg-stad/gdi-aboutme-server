@@ -30,11 +30,37 @@ paths:
                   status:
                     type:
                       string
+  /api/v1/aboutme/send-verification-notification/email:
+    post:
+      operationId: aboutMeSendEmailVerificationNotification
+      summary: Notify user with a link for verifying their email adress
+      tags:
+        - Contact details verification
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendVerificationResponse'
+  /api/v1/aboutme/send-verification-notification/phone:
+    post:
+      operationId: aboutMeSendPhoneVerificationNotification
+      summary: Notify user with a link for verifying their phone number
+      tags:
+        - Contact details verification
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendVerificationResponse'
 
   /api/v1/aboutme/verify/email/{verificationCode}:
     get:
       operationId: aboutMeVerifyEmail
-      summary: 'Verify email given verification code'
+      summary: 'Verify user submitted email details given verification code'
       tags:
         - Contact details verification
       parameters:
@@ -49,11 +75,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VerficationResponse'
+                $ref: '#/components/schemas/VerificationResponse'
   /api/v1/aboutme/verify/phone/{verificationCode}:
     get:
       operationId: aboutMeVerifyPhone
-      summary: 'Verify phone given verification code'
+      summary: 'Verify user submited phone details given verification code'
       tags:
         - Contact details verification
       parameters:
@@ -68,7 +94,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VerficationResponse'
+                $ref: '#/components/schemas/VerificationResponse'
   /api/v1/aboutme/graphql:
     post:
       operationId: aboutMeGql
@@ -90,10 +116,15 @@ paths:
                 $ref: "#/components/schemas/GraphQLResponse"
 components:
   schemas:
-    VerficationResponse:
+    VerificationResponse:
       type: object
       properties:
         verified:
+          type: boolean
+    SendVerificationResponse:
+      type: object
+      properties:
+        success:
           type: boolean
     GraphQLQuery:
       type: object

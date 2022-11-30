@@ -18,6 +18,8 @@ export const createTestServices = (services: Partial<AboutMeServices> = {}): Abo
 		updatePerson: notImplemented,
 		verifyEmail: notImplemented,
 		verifyPhone: notImplemented,
+		notifyEmail: notImplemented,
+		notifyPhone: notImplemented,
 		checkHealth: notImplemented,
 	},
 	...services,

@@ -58,7 +58,6 @@ describe('email verification: GET /api/v1/aboutme/verify/email/{code}', () => {
 			} })
 	})
 
-
 	it('verification is idempotent', async () => {
 		const db = {
 			'test-id-1': {

@@ -12,7 +12,7 @@ describe('notifyEmailChangedUpdater', () => {
 		}
 		const fakeNotifier: PersonNotifier = {
 			notifyEmailChanged: notImplemented,
-			notifyPhoneChanged:async (phone: Phone) => nofificationLog.push(phone),
+			notifyPhoneChanged: async (phone?: Phone) => (phone && nofificationLog.push(phone), true),
 		}
 		const updater = createNotifyPhoneChangedUpdater(fakeUpdater, fakeNotifier)
 		await updater.updatePerson(initialPerson, {})

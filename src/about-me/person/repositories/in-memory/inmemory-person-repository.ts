@@ -26,7 +26,20 @@ export const createInMemoryPersonRepository = (db: object, updater: PersonUpdate
 			found.phone.verifiedDate = new Date()
 		}
 		return found
-
+	},
+	notifyEmail: async id => {
+		const found = db[id]
+		if (found?.email) {
+			return updater.notifier?.notifyEmailChanged(found.email)
+		}
+		return false
+	},
+	notifyPhone: async id => {
+		const found = db[id]
+		if (found?.phone) {
+			return updater.notifier?.notifyPhoneChanged(found.email)
+		}
+		return false
 	},
 	checkHealth: async () => true,
 })

@@ -30,14 +30,17 @@ export interface PersonRepository {
 	updatePerson: (id: any, update: PersonInput, knownFromElseWhere?: () => Partial<Person>) => Promise<Person>
 	verifyEmail: (verificationCode: string) => Promise<Person|null>
 	verifyPhone: (verificationCode: string) => Promise<Person|null>
+	notifyEmail: (id: string) => Promise<boolean>
+	notifyPhone: (id: string) => Promise<boolean>
 	checkHealth: () => Promise<boolean>
 }
 
 export interface PersonUpdater {
+	notifier?: PersonNotifier
 	updatePerson: (person: Person, update: PersonInput) => Promise<Person>
 }
 
 export interface PersonNotifier {
-	notifyEmailChanged: (email: Email) => Promise<any>
-	notifyPhoneChanged: (phone: Phone) => Promise<any>
+	notifyEmailChanged: (email?: Email) => Promise<boolean>
+	notifyPhoneChanged: (phone?: Phone) => Promise<boolean>
 }

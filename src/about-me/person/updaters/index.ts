@@ -27,9 +27,11 @@ export const createCompositePersonUpdater = (...updaters: PersonUpdater[]): Pers
 	updatePerson: async (person, update) => updaters.reduce((previous, updater) => previous.then(person => updater.updatePerson(person, update)), Promise.resolve(person)),
 })
 
-export const createDefaultNotifyingUpdater = (notifier: PersonNotifier, ...updaters: PersonUpdater[]): PersonUpdater => 
-	createNotifyEmailChangedUpdater(
+export const createDefaultNotifyingUpdater = (notifier: PersonNotifier, ...updaters: PersonUpdater[]): PersonUpdater => ({
+	notifier,
+	...createNotifyEmailChangedUpdater(
 		createNotifyPhoneChangedUpdater(
 			createCompositePersonUpdater(...updaters)
-			, notifier),notifier)
+			, notifier),notifier),
+})
 	

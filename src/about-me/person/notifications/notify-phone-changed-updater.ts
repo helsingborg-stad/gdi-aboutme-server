@@ -1,6 +1,7 @@
 import { PersonNotifier, PersonUpdater } from '../types'
 
 export const createNotifyPhoneChangedUpdater = (inner: PersonUpdater, notifier: PersonNotifier): PersonUpdater => ({
+	notifier,
 	updatePerson: async (initialPerson, update) => {
 		const updatedPerson = await inner.updatePerson(initialPerson, update)
 
