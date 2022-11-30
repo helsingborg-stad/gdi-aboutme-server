@@ -6,6 +6,7 @@ import { readFile } from 'fs/promises'
 const mapValues = <T, S>(o: Record<string, T>, map: ((k: string, v: T) => S)) => 
 	Object.fromEntries(Object.entries(o).map(([ k, v ]) => ([ k, map(k, v) ])))
 
+
 const createMetricsExtension = ({	register, prefix }: {register: Registry, prefix: string}): ApplicationExtension => {
 	let counters: Record<string, Counter> = {}
 	return {
@@ -37,6 +38,11 @@ export const metricsModule = (): ApplicationModule => async ({ router, extend }:
 	const prefix = await getPrefix()
 	const register = new Registry()
 	collectDefaultMetrics({ register, prefix })
+
+	register.setDefaultLabels({
+		env: process.env.NODE_ENV || 'production',
+	})
+
 
 	extend(createMetricsExtension({ register, prefix }))
 	router.get('/metrics', async ctx => {
