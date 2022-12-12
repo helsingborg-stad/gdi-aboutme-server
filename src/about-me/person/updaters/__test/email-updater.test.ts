@@ -43,7 +43,7 @@ describe('emailUpdater', () => {
 			},
 		})
 	})
-	it('ignores malformed emails', async () => {
+	it('throws on malformed emails', async () => {
 		const updater = createEmailUpdater()
 
 		const initialEmail: Email = {
@@ -52,6 +52,14 @@ describe('emailUpdater', () => {
 			verifiedDate: '2020-02-02',
 		}
 		
+		await expect(() => updater.updatePerson(
+			makePerson({ 
+				email: initialEmail,
+			}),
+			{ email: 'badly formattted email' }))
+			.rejects
+			.toThrow('Validation error')
+		/*
 		const updated = await updater.updatePerson(
 			makePerson({ 
 				email: initialEmail,
@@ -61,5 +69,6 @@ describe('emailUpdater', () => {
 		expect(updated).toMatchObject({
 			email: initialEmail,
 		})
+		*/
 	})
 })

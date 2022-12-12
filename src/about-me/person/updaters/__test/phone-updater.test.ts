@@ -45,10 +45,9 @@ describe('phoneUpdater', () => {
 	})
 
 	it.each([
-		[null],
 		['bad number'],
 		['123'],
-	])('ignores update on invalid number "%s"', async phoneNumber => {
+	])('throws on update with invalid number "%s"', async phoneNumber => {
 		const updater = createPhoneUpdater('SE')
 
 		const initialPhone: Phone = {
@@ -57,18 +56,16 @@ describe('phoneUpdater', () => {
 			verifiedDate: '2020-02-02',
 		}
 		
-		const updated = await updater.updatePerson(
+		await expect(() => updater.updatePerson(
 			makePerson({ 
 				phone: initialPhone,
 			}),
-			{ phoneNumber })
-
-		expect(updated).toMatchObject({
-			phone: initialPhone,
-		})
+			{ phoneNumber }))
+			.rejects
+			.toThrow('Validation error')
 	})
 	
-	it('ignores malformed phone numbers', async () => {
+	it('throws on malformed phone numbers', async () => {
 		const updater = createPhoneUpdater('SE')
 
 		const initialPhone: Phone = {
@@ -77,14 +74,12 @@ describe('phoneUpdater', () => {
 			verifiedDate: '2020-02-02',
 		}
 		
-		const updated = await updater.updatePerson(
+		await expect(() => updater.updatePerson(
 			makePerson({ 
 				phone: initialPhone,
 			}),
-			{ phoneNumber: 'badly formattted phone number' })
-
-		expect(updated).toMatchObject({
-			phone: initialPhone,
-		})
+			{ phoneNumber: 'badly formattted phone number' }))
+			.rejects
+			.toThrow('Validation error')
 	})
 })
