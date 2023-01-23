@@ -20,7 +20,7 @@ export const createAboutMeApp = ({ services, validateResponse }: {services: Abou
 		validateResponse,
 	})
 		.use(webFrameworkModule())
-		.use(swaggerModule())
+		.use(swaggerModule({ routePrefix: '/api/v1/aboutme/docs/swagger' }))
 		.use(metricsModule())
 		.use(jwtUserModule(services.authorization))
 		.use(fallbackUserModule())
