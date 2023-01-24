@@ -125,6 +125,7 @@ Assuming you have configured a fallback user (thus not requiring a JWT Bearer to
 
 - [MongoDB persistence](src/about-me/person/repositories/mongo/README.md)
 - [Change publication to AMQP](src/about-me/person/notifications/amqp/README.md)
+- [Cases from gdi-cases-server](src/about-me/external-providers/gdi-cases-server/README.md)
 ## Roadmap
 
 - [ ] Expand model
