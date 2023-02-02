@@ -14,6 +14,7 @@ export const createAboutMe = (services: AboutMeServices): GraphQLModule => ({
 			caseId: String
 			subjectId: String
 			updateTime: String
+			organization: String
 			label: String
 			description: String
 			status: String
