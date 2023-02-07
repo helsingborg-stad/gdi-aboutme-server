@@ -83,7 +83,12 @@ export const createAboutMe = (services: AboutMeServices): GraphQLModule => ({
 			}),
 		},
 		Mutation: {
-			updateMe: async ({ ctx: { user: { id, firstName, lastName } }, args: { me } }) => services.persons.updatePerson(id, me, () => ({ id, firstName, lastName, type: 'person' })),
+			updateMe: async ({ ctx: { user: { id, firstName, lastName } }, args: { me } }) => ({
+				id,
+				type:'person',
+				...await services.persons.updatePerson(id, me, () => ({ id, firstName, lastName, type: 'person' })),
+				cases: async () => services.gdiCases?.listCasesBySubjectId(id) || [],
+			}),
 		},
 	},
 })
