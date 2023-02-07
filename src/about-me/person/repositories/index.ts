@@ -1,5 +1,6 @@
 import { PersonRepository, PersonUpdater } from '../types'
 import { createPersonUpdaterFromEnv } from '../updaters/index'
+import { tryCreateDatatorgetFrendsPersonRepositoryFromEnv } from './hbg-datatorget/index'
 import { createInMemoryPersonRepository } from './in-memory/inmemory-person-repository'
 import { tryCreateMongoPersonRepositoryFromEnv } from './mongo'
 
@@ -10,4 +11,6 @@ export { createInMemoryPersonRepository }
  */
 /* istanbul ignore next : runtime configuration read */
 export const createPersonRepositoryFromEnv = (updater: PersonUpdater = createPersonUpdaterFromEnv()): PersonRepository => 
-	tryCreateMongoPersonRepositoryFromEnv(updater) || createInMemoryPersonRepository({}, updater)
+	tryCreateDatatorgetFrendsPersonRepositoryFromEnv(updater)	
+	|| tryCreateMongoPersonRepositoryFromEnv(updater) 
+	|| createInMemoryPersonRepository({}, updater)
