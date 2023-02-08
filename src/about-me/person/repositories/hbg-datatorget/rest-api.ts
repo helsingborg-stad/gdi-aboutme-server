@@ -105,7 +105,7 @@ export const toVerifyContactDetailsRequest = (...verificationCodes: string[]): V
 	},
 })
 
-export const createRestClient = (uri: string, apiKey: string): RestClient => ({
+export const createRestClient = ({ uri, apiKey }: {uri: string, apiKey: string}): RestClient => ({
 	getPerson: id => request
 		.get(new URL(`/api/v1/gdi/person/${id}`, uri).toString())
 		.set('X-ApiKey', apiKey)

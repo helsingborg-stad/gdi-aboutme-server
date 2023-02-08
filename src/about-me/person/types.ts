@@ -16,8 +16,8 @@ export interface Person {
 	id: string
 	firstName?: string
 	lastName?: string
-	email?: Email
-	phone?: Phone
+	email?: Email|null
+	phone?: Phone|null
 }
 
 export interface PersonInput {

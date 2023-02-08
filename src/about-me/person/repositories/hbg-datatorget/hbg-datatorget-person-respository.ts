@@ -1,10 +1,5 @@
 import { Person, PersonRepository, PersonUpdater } from '../../types'
-import { ContactDetailsUpdate, createRestClient, PersonInformation } from './rest-api'
-
-export interface DatatorgetFrendsConfiguration {
-	uri: string,
-	apiKey: string
-}
+import { ContactDetailsUpdate, PersonInformation, RestClient } from './rest-api'
 
 export const toPerson = (p: PersonInformation): Person => p ? ({
 	id: p.social_security_number,
@@ -26,52 +21,48 @@ export const toPerson = (p: PersonInformation): Person => p ? ({
 		}))[0] || null,
 }) : null
 
-export const createHbgDatatorgetPersonRepository = ({ apiKey, uri }: DatatorgetFrendsConfiguration, updater: PersonUpdater) : PersonRepository => {
-	const client = createRestClient(uri, apiKey)
+export const createHbgDatatorgetPersonRepository = (client: RestClient, updater: PersonUpdater) : PersonRepository => ({
+	getPerson: async (id, knownFromElsewhere) => {
+		const found = await client.getPerson(id)
+		return toPerson(found) || knownFromElsewhere?.()
+	},
+	updatePerson: async (id, update, knownFromElsewhere) => {
+		const found = await client.getPerson(id)
+		const updated = await updater.updatePerson({
+			id,
+			...(toPerson(found) || knownFromElsewhere?.()),
+		}, update)
+		const updates: ContactDetailsUpdate[] = [
+			{
+				category_id: 1,
+				contact_type_id: 1,
+				contact_type_value: updated.email?.address || '',
+			},
+			{
+				category_id: 1,
+				contact_type_id: 2,
+				contact_type_value: updated.phone?.number || '',
+			},
+		].filter(v => v)
+		await client.updateContactDetails(found.person_id, updates)
 
-	return {
-		getPerson: async (id, knownFromElsewhere) => {
-			const found = await client.getPerson(id)
-			return toPerson(found) || knownFromElsewhere?.()
-		},
-		updatePerson: async (id, update, knownFromElsewhere) => {
-			const found = await client.getPerson(id)
-			const updated = await updater.updatePerson({
-				id,
-				...(toPerson(found) || knownFromElsewhere?.()),
-			}, update)
-			const updates: ContactDetailsUpdate[] = [
-				{
-					category_id: 1,
-					contact_type_id: 1,
-					contact_type_value: updated.email?.address || '',
-				},
-				{
-					category_id: 1,
-					contact_type_id: 2,
-					contact_type_value: updated.phone?.number || '',
-				},
-			].filter(v => v)
-			await client.updateContactDetails(found.person_id, updates)
-
-			return client.getPerson(id).then(toPerson)
-		},
-		verifyEmail: async (verificationCode) => {
-			await client.verifyContactDetails(verificationCode)
-			return {} as Person
-		},
-		verifyPhone: async (verificationCode) => {
-			await client.verifyContactDetails(verificationCode)
-			return {} as Person
-		},
-		notifyEmail: async (id) => {
-			const found = toPerson(await client.getPerson(id))
-			return found && await updater?.notifier?.notifyEmailChanged(found?.email)
-		},
-		notifyPhone: async (id) => {
-			const found = toPerson(await client.getPerson(id))
-			return found && await updater?.notifier?.notifyPhoneChanged(found?.phone)
-		},
-		checkHealth: async () => true,
-	}
-}
+		return client.getPerson(id).then(toPerson)
+	},
+	verifyEmail: async (verificationCode) => {
+		await client.verifyContactDetails(verificationCode)
+		return {} as Person
+	},
+	verifyPhone: async (verificationCode) => {
+		await client.verifyContactDetails(verificationCode)
+		return {} as Person
+	},
+	notifyEmail: async (id) => {
+		const found = toPerson(await client.getPerson(id))
+		return found && await updater?.notifier?.notifyEmailChanged(found?.email)
+	},
+	notifyPhone: async (id) => {
+		const found = toPerson(await client.getPerson(id))
+		return found && await updater?.notifier?.notifyPhoneChanged(found?.phone)
+	},
+	checkHealth: async () => true,
+})
