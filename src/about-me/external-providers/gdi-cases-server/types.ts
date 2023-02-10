@@ -2,11 +2,13 @@ export interface GdiCasesServerCase {
 	caseId: string
 	subjectId: string
 	updateTime: string
+	organization: string,
 	label: string
 	description: string
 	status: string
 	statusHint: string
 	events: GdiCasesServerCaseEvent[]
+	actions: GdiCasesServerCaseAction[]
 }
 export interface GdiCasesServerCaseEvent {
 	updateTime: string

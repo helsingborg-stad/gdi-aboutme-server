@@ -1,6 +1,7 @@
 import { getEnv } from '@helsingborg-stad/gdi-api-node'
 import { GdiCasesServer, GdiCasesServerCase } from './types'
 import request from 'superagent'
+import { createSampleGdiCasesServer } from './sample-cases-server'
 
 const makeUrl = (url: string, base: string) => new URL(url, base).toString()
 
@@ -23,7 +24,7 @@ export const createGdiCasesServerFromEnv = (): GdiCasesServer => {
 		getEnv('GDICASES_URI', { trim: true, fallback: '' }),
 		getEnv('GDICASES_APIKEY', { trim: true, fallback: '' }) ]
 
-	return url && apiKey
+	return createSampleGdiCasesServer(  url && apiKey
 		? createGdiCasesServer({ url, apiKey })
-		: createNullGdiCasesServer()
+		: createNullGdiCasesServer())
 }
