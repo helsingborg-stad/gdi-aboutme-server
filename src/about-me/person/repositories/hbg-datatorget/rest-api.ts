@@ -73,7 +73,8 @@ export interface RestClient {
 	verifyContactDetails: (...verificationCodes: string[]) => Promise<void>
 }
 
-const tap = <T>(v: T): T => (console.log(JSON.stringify(v, null, 2)), v)
+// const tap = <T>(v: T): T => (console.log(JSON.stringify(v, null, 2)), v)
+const tap = <T>(v: T): T => v
 
 export const toUpdateContactDetailsRequest = (personGuid: string, updates: ContactDetailsUpdate[]): UpdateContactDetailsRequest => ({
 	jsonapi: { version: '1.0' },
