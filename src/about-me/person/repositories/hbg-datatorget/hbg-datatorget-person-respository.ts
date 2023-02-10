@@ -24,7 +24,7 @@ export const toPerson = (p: PersonInformation): Person => p ? ({
 export const createHbgDatatorgetPersonRepository = (client: RestClient, updater: PersonUpdater) : PersonRepository => ({
 	getPerson: async (id, knownFromElsewhere) => {
 		const found = await client.getPerson(id)
-		return toPerson(found) || knownFromElsewhere?.()
+		return toPerson(found) // || knownFromElsewhere?.()
 	},
 	updatePerson: async (id, update, knownFromElsewhere) => {
 		const found = await client.getPerson(id)
@@ -36,12 +36,12 @@ export const createHbgDatatorgetPersonRepository = (client: RestClient, updater:
 			{
 				category_id: 1,
 				contact_type_id: 1,
-				contact_type_value: updated.email?.address || '',
+				contact_value: updated.email?.address || '',
 			},
 			{
 				category_id: 1,
 				contact_type_id: 2,
-				contact_type_value: updated.phone?.number || '',
+				contact_value: updated.phone?.number || '',
 			},
 		].filter(v => v)
 		await client.updateContactDetails(found.person_id, updates)

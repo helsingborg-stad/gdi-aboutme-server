@@ -23,11 +23,7 @@ export interface UpdateContactDetailsRequest {
 		attributes: {
 			person: {
 				person_id: string,
-				contact_information: {
-					category_id: number
-					contact_type_id: number
-					contact_type_value: string
-				}[]
+				contact_information: ContactDetailsUpdate[]
 			}[]
 		}
 	}
@@ -49,7 +45,7 @@ export interface VerifyContactDetailsRequest {
 export interface ContactDetailsUpdate {
 	category_id: number
 	contact_type_id: number
-	contact_type_value: string
+	contact_value: string
 }
 
 export interface PersonInformation {

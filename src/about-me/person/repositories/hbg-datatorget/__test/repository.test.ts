@@ -59,12 +59,12 @@ describe('createHbgDatatorgetPersonRepository()', () => {
 			{
 				category_id: CATEGORY_PRIVATE,
 				contact_type_id: CONTACT_TYPE_EMAIL,
-				contact_type_value: 'a@b.com',
+				contact_value: 'a@b.com',
 			},
 			{
 				category_id: CATEGORY_PRIVATE,
 				contact_type_id: CONTACT_TYPE_PHONE,
-				contact_type_value: '+46123456',
+				contact_value: '+46123456',
 			},
 		])
 	})
