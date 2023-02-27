@@ -6,8 +6,6 @@ This project is tested against Helsingborg Stad Datatorget Person API.
 Your environment should contain
 
 ```sh
-`
 HBG_DATATORGET_URI=https://...
 HBG_DATATORGET_APIKEY=...
-`
 ```
