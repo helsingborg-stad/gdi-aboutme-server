@@ -1,4 +1,4 @@
-import { GdiCasesServer, GdiCasesServerCase } from './types'
+import { GdiCasesServerCase } from './types'
 
 const makeCase = (subjectId: string, i: number, status: string, statusHint): GdiCasesServerCase => ({
 	caseId: `sample-case-${i}`,
@@ -35,15 +35,9 @@ const makeCase = (subjectId: string, i: number, status: string, statusHint): Gdi
 	}],
 })
 
-const createSampleCases = (subjectId: string): GdiCasesServerCase[] => ([
+export const createSampleCases = (subjectId: string): GdiCasesServerCase[] => ([
 	makeCase(subjectId, 101, 'Godkänt', 'approved'),
 	makeCase(subjectId, 202, 'Nekad', 'rejected'),
 	makeCase(subjectId, 303, 'Avslutat', 'closed'),
 	makeCase(subjectId, 404, 'Komplettering krävs', 'incomplete'),
 ])
-
-export const createSampleGdiCasesServer = (inner: GdiCasesServer): GdiCasesServer => ({
-	listCasesBySubjectId: async (subjectId) => inner
-		.listCasesBySubjectId(subjectId)
-		.then(cases => cases?.length > 0 ? cases : createSampleCases(subjectId)),
-})
