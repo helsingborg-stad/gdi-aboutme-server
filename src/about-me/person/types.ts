@@ -14,6 +14,7 @@ export interface Phone {
 
 export interface Person {
 	id: string
+	readOnly?: boolean
 	firstName?: string
 	lastName?: string
 	email?: Email|null

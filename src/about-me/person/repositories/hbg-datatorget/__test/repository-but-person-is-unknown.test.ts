@@ -50,20 +50,21 @@ const createFakeRestClient = (db: Record<string, PersonInformation>): RestClient
 })
 
 describe('createHbgDatatorgetPersonRepository()', () => {
-	it('getPerson(<unknown person>) => undefined', async () => {
+	it('getPerson(<unknown person>) => {readOnly: true}', async () => {
 		const repo = createRepo(createFakeRestClient({}))
 		const p = await repo.getPerson('ssn-123')
-		expect(p).toBeFalsy()
+		expect(p).toMatchObject({ id: 'ssn-123', readOnly: true })
 	})
-
+	/*
 	it('getPerson() doesnt call supplied data callback', async () => {
 		const repo = createRepo(createFakeRestClient({}))
 		const p = await repo.getPerson('ssn-123', () => { throw new Error('Unexpected call')})
 		expect(p).toBeNull()
 	})
+	*/
 	it('getPerson() doesnt call supplied data callback', async () => {
 		const repo = createRepo(createFakeRestClient({}))
 		const p = await repo.getPerson('ssn-123', () => ({ id: 'ssn-123', firstName: 'John', lastName: 'Doe' }))
-		expect(p).toBeNull()
+		expect(p).toMatchObject({ id: 'ssn-123', firstName: 'John', lastName: 'Doe', readOnly: true })
 	})
 })

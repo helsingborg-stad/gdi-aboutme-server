@@ -95,7 +95,6 @@ export const toVerifyContactDetailsRequest = (...verificationCodes: string[]): V
 	},
 	data: {
 		type: 'verification',
-		// "id": "string",
 		attributes: {
 			verify: verificationCodes.map(vc => ({ verification_code: vc })),
 		},
@@ -108,7 +107,8 @@ export const createRestClient = ({ uri, apiKey }: {uri: string, apiKey: string})
 		.set('X-ApiKey', apiKey)
 		.then(({ body }) => body as GetPersonResult)
 		.then(tap)
-		.then(p => p?.data?.attributes?.person?.[0]),
+		.then(p => p?.data?.attributes?.person?.[0])
+		.catch(err => err?.status === 404 ? null : Promise.reject(err)),
 
 	updateContactDetails: (personGuid, updates) => request
 		.post(new URL(`/api/v1/gdi/person/${personGuid}/contact-details`, uri).toString())

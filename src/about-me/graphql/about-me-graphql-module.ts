@@ -54,6 +54,7 @@ export const createAboutMe = (services: AboutMeServices): GraphQLModule => ({
 		}
 		type Person {
 			id: String!,
+			readOnly: Boolean,
 			type: String,
 			firstName: String,
 			lastName: String,

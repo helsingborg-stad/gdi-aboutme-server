@@ -3,6 +3,7 @@ import { ContactDetailsUpdate, PersonInformation, RestClient } from './rest-api'
 
 export const toPerson = (p: PersonInformation): Person => p ? ({
 	id: p.social_security_number,
+	readOnly: false,
 	firstName: p.first_name,
 	lastName: p.last_name,
 	email: p.contact_information?.filter(c => (c.category_id === 1) && (c.contact_type_id === 1))
@@ -21,32 +22,47 @@ export const toPerson = (p: PersonInformation): Person => p ? ({
 		}))[0] || null,
 }) : null
 
+const combineToPerson = (id: string, p: PersonInformation, knownFromElseWhere: () => Partial<Person>): Person => 
+	toPerson(p) || ({ id, readOnly: true, ...knownFromElseWhere?.() })
+
 export const createHbgDatatorgetPersonRepository = (client: RestClient, updater: PersonUpdater) : PersonRepository => ({
+	/*
 	getPerson: async (id, knownFromElsewhere) => {
 		const found = await client.getPerson(id)
-		return toPerson(found) // || knownFromElsewhere?.()
+		return toPerson(found) || { id, readOnly: true, ...knownFromElsewhere?.() }
 	},
+	*/
+	getPerson: async (id, knownFromElsewhere) => combineToPerson(
+		id,
+		await client.getPerson(id),
+		knownFromElsewhere),
 	updatePerson: async (id, update, knownFromElsewhere) => {
 		const found = await client.getPerson(id)
-		const updated = await updater.updatePerson({
+		if (found) {
+			const updated = await updater.updatePerson({
+				id,
+				...(toPerson(found) || { ...knownFromElsewhere?.(), readOnly: true }),
+			}, update)
+			const updates: ContactDetailsUpdate[] = [
+				{
+					category_id: 1,
+					contact_type_id: 1,
+					contact_value: updated.email?.address || '',
+				},
+				{
+					category_id: 1,
+					contact_type_id: 2,
+					contact_value: updated.phone?.number || '',
+				},
+			].filter(v => v)
+			await client.updateContactDetails(found.person_id, updates)
+		}
+		// return client.getPerson(id).then(toPerson)
+		return combineToPerson(
 			id,
-			...(toPerson(found) || knownFromElsewhere?.()),
-		}, update)
-		const updates: ContactDetailsUpdate[] = [
-			{
-				category_id: 1,
-				contact_type_id: 1,
-				contact_value: updated.email?.address || '',
-			},
-			{
-				category_id: 1,
-				contact_type_id: 2,
-				contact_value: updated.phone?.number || '',
-			},
-		].filter(v => v)
-		await client.updateContactDetails(found.person_id, updates)
-
-		return client.getPerson(id).then(toPerson)
+			await client.getPerson(id),
+			knownFromElsewhere 
+		)
 	},
 	verifyEmail: async (verificationCode) => {
 		await client.verifyContactDetails(verificationCode)
