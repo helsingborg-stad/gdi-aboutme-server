@@ -12,4 +12,4 @@ export const createPersonNotifierFromEnv = (): PersonNotifier => tryCreateAmqpPe
 /**
  * create a nofifier that does nothing (besides possibly debug logging)
  */
-export const ceateDefaultPersonNotifier = (): PersonNotifier => createNullPersonNotifier()
+export const createDefaultPersonNotifier = (): PersonNotifier => createNullPersonNotifier()

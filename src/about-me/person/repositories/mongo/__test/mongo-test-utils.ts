@@ -1,8 +1,9 @@
 import { MongoClient } from 'mongo-mock'
 import { createMongoPersonRepository, MongoPersonRepository } from '../mongo-person-repository'
-import { createDefaultPersonUpdater, createDefaultNotifyingUpdater } from '../../../updaters'
+import { createDefaultPersonUpdater } from '../../../updaters'
 import { randomUUID } from 'crypto'
 import { Email, Phone } from '../../../types'
+import { makePersonNotifier } from '../../../notifications/make-person-notifier'
 
 // We create a mocked mongodb
 const createMongoClient = (uri) => MongoClient.connect(uri)
@@ -27,9 +28,9 @@ export const createTestRepo = (notificationsLog: any[] = []): MongoPersonReposit
 			collectionName: 'persons',
 			testMode: true,
 		},
-		createDefaultNotifyingUpdater({
+		createDefaultPersonUpdater(),
+		makePersonNotifier({
 			notifyEmailChanged: async (email?: Email) => (notificationsLog.push(email), true),
 			notifyPhoneChanged: async (phone?: Phone) => (notificationsLog.push(phone), true),
-		},
-		createDefaultPersonUpdater()),
+		}),
 		(url) => createMongoClient(url)))

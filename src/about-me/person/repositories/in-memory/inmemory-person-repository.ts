@@ -1,10 +1,11 @@
 import { createDefaultPersonUpdater } from '../../updaters/index'
-import { PersonRepository, PersonUpdater } from '../../types'
+import { createDefaultPersonNotifier } from '../../notifications/index'
+import { PersonNotifier, PersonRepository, PersonUpdater } from '../../types'
 
 /**
  * create person repository thats works totally in memory
  */
-export const createInMemoryPersonRepository = (db: object, updater: PersonUpdater = createDefaultPersonUpdater()): PersonRepository => ({
+export const createInMemoryPersonRepository = (db: object, updater: PersonUpdater = createDefaultPersonUpdater(), notifier: PersonNotifier = createDefaultPersonNotifier()): PersonRepository => ({
 	getPerson: async (id, knownFromElsewhere) => db[id] || knownFromElsewhere?.(),
 	updatePerson: (id, update, knownFromElsewhere) => updater.updatePerson({ id, ...(db[id] || knownFromElsewhere?.()) }, update)
 		.then(person => {
@@ -30,14 +31,14 @@ export const createInMemoryPersonRepository = (db: object, updater: PersonUpdate
 	notifyEmail: async id => {
 		const found = db[id]
 		if (found?.email) {
-			return updater.notifier?.notifyEmailChanged(found.email)
+			return notifier?.notifyEmailChanged(found.email)
 		}
 		return false
 	},
 	notifyPhone: async id => {
 		const found = db[id]
 		if (found?.phone) {
-			return updater.notifier?.notifyPhoneChanged(found.email)
+			return notifier?.notifyPhoneChanged(found.email)
 		}
 		return false
 	},

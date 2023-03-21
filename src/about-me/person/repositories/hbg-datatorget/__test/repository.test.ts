@@ -1,4 +1,5 @@
 import { createDefaultPersonUpdater } from '../../../updaters/index'
+import { createNullPersonNotifier } from '../../../notifications/null-person-notifier'
 import { createHbgDatatorgetPersonRepository } from '../hbg-datatorget-person-respository'
 import { CATEGORY_PRIVATE, CONTACT_TYPE_EMAIL, CONTACT_TYPE_PHONE, PersonInformation, RestClient } from '../rest-api'
 
@@ -9,7 +10,9 @@ const createRepo = (client: Partial<RestClient>) => createHbgDatatorgetPersonRep
 	updateContactDetails: notImplemented,
 	verifyContactDetails: notImplemented,
 	...client,
-}, createDefaultPersonUpdater())
+}, 
+createDefaultPersonUpdater(),
+createNullPersonNotifier())
 
 const typed = <T>(value: T): T => value
 

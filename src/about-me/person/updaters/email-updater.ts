@@ -14,6 +14,8 @@ export const createEmailUpdater = (): PersonUpdater => ({
 	}),
 })
 
+export const createEmailUpdaterFromEnv = (): PersonUpdater => createEmailUpdater()
+
 const getValidatedEmail = (email: string): string|null|false => email && EmailValidator.validate(email) && email
 
 const patchEmail = (email: Email, update: string|null|false): Email | null => 
@@ -28,6 +30,6 @@ const patchEmail = (email: Email, update: string|null|false): Email | null =>
 						address: update,
 						isVerified: false,
 						verifiedDate: null,
-						verificationCode: randomUUID(),
+						verificationCode: email?.verificationCode || randomUUID(),
 					})
 					: email

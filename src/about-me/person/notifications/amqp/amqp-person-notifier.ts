@@ -1,4 +1,5 @@
 import { Email, PersonNotifier, Phone } from '../../types'
+import { makePersonNotifier } from '../make-person-notifier'
 import { AmqpSession, createAmqpSession } from './amqp-session'
 import { AmqpConfiguration, EmailChangedMessage, PhoneChangedMessage } from './types'
 
@@ -25,7 +26,7 @@ const withPhone = async (phone: Phone|null, action: ((message: PhoneChangedMessa
 	return false
 }
 
-const createPersonNotifierOnAmqpSession = ({ notifyEmailTopic, notifyPhoneTopic }: AmqpConfiguration, session: AmqpSession): PersonNotifier => ({
+const createPersonNotifierOnAmqpSession = ({ notifyEmailTopic, notifyPhoneTopic }: AmqpConfiguration, session: AmqpSession): PersonNotifier => makePersonNotifier({
 	notifyEmailChanged: async (email?: Email) => withEmail(email, message => session.publish<EmailChangedMessage>(notifyEmailTopic, message).then(() => true)),
 	notifyPhoneChanged: async (phone?: Phone) => withPhone(phone, message => session.publish<PhoneChangedMessage>(notifyPhoneTopic, message).then(() => true)),
 })
