@@ -48,14 +48,12 @@ export const createHbgDatatorgetPersonRepository = (client: RestClient, updater:
 
 		return client.getPerson(id).then(toPerson)
 	},
-	verifyEmail: async (verificationCode) => {
-		await client.verifyContactDetails(verificationCode)
-		return {} as Person
-	},
-	verifyPhone: async (verificationCode) => {
-		await client.verifyContactDetails(verificationCode)
-		return {} as Person
-	},
+	verifyEmail: async (verificationCode) => client
+		.verifyContactDetails(verificationCode)
+		.then(() => ({} as Person), () => null),
+	verifyPhone: async (verificationCode) => client
+		.verifyContactDetails(verificationCode)
+		.then(() => ({} as Person), () => null),
 	notifyEmail: async (id) => {
 		const found = toPerson(await client.getPerson(id))
 		return found && await updater?.notifier?.notifyEmailChanged(found?.email)
