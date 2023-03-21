@@ -1,5 +1,5 @@
 import { MongoClient, Collection, Db, MongoClientOptions } from 'mongodb'
-import { Person, PersonRepository, PersonUpdater } from '../../types'
+import { Person, PersonNotifier, PersonRepository, PersonUpdater } from '../../types'
 
 export interface MongoPersonRepository extends PersonRepository {
 	inspect: (inspector: (connection: Connection) => any) => Promise<any>
@@ -36,7 +36,11 @@ const connect = async ({ uri, collectionName = 'persons', testMode = false }: Mo
 		collection: db.collection('persons'),
 	}
 }
-export const createMongoPersonRepository = (config: MongoRepositoryConfiguration, updater: PersonUpdater, clientFactory: MongoClientFactory = defaultMongoClientFactory) : MongoPersonRepository => {
+export const createMongoPersonRepository = (
+	config: MongoRepositoryConfiguration, 
+	updater: PersonUpdater,
+	notifier: PersonNotifier, 
+	clientFactory: MongoClientFactory = defaultMongoClientFactory) : MongoPersonRepository => {
 	const c = connect(config, clientFactory)
 	const withConnection = <T>(handler: (connection: Connection) => Promise<T>): Promise<T> => c.then(connection => handler(connection))
 	return {
@@ -56,7 +60,9 @@ export const createMongoPersonRepository = (config: MongoRepositoryConfiguration
 			}, update)
 			// await (found ? collection.replaceOne({ id }, updated) : collection.insertOne(updated))
 			await (found ? collection.updateOne({ id }, { $set: updated }) : collection.insertOne(updated))
-			return (await collection.findOne({ id })) as unknown as Person
+			const final = (await collection.findOne({ id })) as unknown as Person
+			await notifier.notifyPersonUpdates(found as unknown as Person, final)
+			return final
 		}),
 		verifyEmail: (verificationCode) => withConnection(async ({ collection }) => {
 			await collection.updateOne(
@@ -83,11 +89,11 @@ export const createMongoPersonRepository = (config: MongoRepositoryConfiguration
 		}),
 		notifyEmail: (id) => withConnection(async ({ collection }) => {
 			const found = await collection.findOne({ id }) as unknown as Person
-			return found && await updater?.notifier?.notifyEmailChanged(found?.email)
+			return found && await notifier.notifyEmailChanged(found?.email)
 		}),
 		notifyPhone: (id) => withConnection(async ({ collection }) => {
 			const found = await collection.findOne({ id }) as unknown as Person
-			return found && await updater?.notifier?.notifyPhoneChanged(found?.phone)
+			return found && await notifier.notifyPhoneChanged(found?.phone)
 		}),
 		checkHealth: async () => withConnection(async ({ collection }) => collection.findOne({ id: 'id-for-healthcheck-purposes' })).then(() => true),
 		inspect: handler => withConnection(handler),

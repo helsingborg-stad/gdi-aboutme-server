@@ -1,3 +1,4 @@
+import { createNullPersonNotifier } from '../../../notifications/null-person-notifier'
 import { createDefaultPersonUpdater } from '../../../updaters/index'
 import { createHbgDatatorgetPersonRepository } from '../hbg-datatorget-person-respository'
 import { PersonInformation, RestClient } from '../rest-api'
@@ -9,9 +10,10 @@ const createRepo = (client: Partial<RestClient>) => createHbgDatatorgetPersonRep
 	updateContactDetails: notImplemented,
 	verifyContactDetails: notImplemented,
 	...client,
-}, createDefaultPersonUpdater())
-
-const typed = <T>(value: T): T => value
+}, 
+createDefaultPersonUpdater(),
+createNullPersonNotifier()
+)
 
 const setAdd = <T>(s: Set<T>, v: T) => s.has(v) ? false : (s.add(v), true)
 

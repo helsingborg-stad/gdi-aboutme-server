@@ -36,11 +36,11 @@ export interface PersonRepository {
 }
 
 export interface PersonUpdater {
-	notifier?: PersonNotifier
 	updatePerson: (person: Person, update: PersonInput) => Promise<Person>
 }
 
 export interface PersonNotifier {
+	notifyPersonUpdates: (initial?: Person, updated?: Person) => Promise<void>
 	notifyEmailChanged: (email?: Email) => Promise<boolean>
 	notifyPhoneChanged: (phone?: Phone) => Promise<boolean>
 }

@@ -1,4 +1,4 @@
-import { Person, PersonRepository, PersonUpdater } from '../../types'
+import { Person, PersonNotifier, PersonRepository, PersonUpdater } from '../../types'
 import { ContactDetailsUpdate, PersonInformation, RestClient } from './rest-api'
 
 export const toPerson = (p: PersonInformation): Person => p ? ({
@@ -21,7 +21,7 @@ export const toPerson = (p: PersonInformation): Person => p ? ({
 		}))[0] || null,
 }) : null
 
-export const createHbgDatatorgetPersonRepository = (client: RestClient, updater: PersonUpdater) : PersonRepository => ({
+export const createHbgDatatorgetPersonRepository = (client: RestClient, updater: PersonUpdater, notifier: PersonNotifier) : PersonRepository => ({
 	getPerson: async (id, knownFromElsewhere) => {
 		const found = await client.getPerson(id)
 		return toPerson(found) // || knownFromElsewhere?.()
@@ -46,7 +46,9 @@ export const createHbgDatatorgetPersonRepository = (client: RestClient, updater:
 		].filter(v => v)
 		await client.updateContactDetails(found.person_id, updates)
 
-		return client.getPerson(id).then(toPerson)
+		const final = await client.getPerson(id).then(toPerson)
+		await notifier.notifyPersonUpdates(toPerson(found), final)
+		return final
 	},
 	verifyEmail: async (verificationCode) => client
 		.verifyContactDetails(verificationCode)
@@ -56,11 +58,11 @@ export const createHbgDatatorgetPersonRepository = (client: RestClient, updater:
 		.then(() => ({} as Person), () => null),
 	notifyEmail: async (id) => {
 		const found = toPerson(await client.getPerson(id))
-		return found && await updater?.notifier?.notifyEmailChanged(found?.email)
+		return found && await notifier.notifyEmailChanged(found?.email)
 	},
 	notifyPhone: async (id) => {
 		const found = toPerson(await client.getPerson(id))
-		return found && await updater?.notifier?.notifyPhoneChanged(found?.phone)
+		return found && await notifier.notifyPhoneChanged(found?.phone)
 	},
 	checkHealth: async () => true,
 })
