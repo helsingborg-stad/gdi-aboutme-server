@@ -1,6 +1,8 @@
 import { GdiCasesServerCase } from './types'
 
 const makeCase = (subjectId: string, i: number, status: string, statusHint): GdiCasesServerCase => ({
+	recordId: `sample-case-${i}`, 
+	isMarkedAsRead: false,
 	caseId: `sample-case-${i}`,
 	subjectId,
 	updateTime: '2023-01-01',

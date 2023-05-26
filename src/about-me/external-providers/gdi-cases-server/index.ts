@@ -8,16 +8,22 @@ const makeUrl = (url: string, base: string) => new URL(url, base).toString()
 
 export const createGdiCasesServer = ({ url, apiKey }: {url: string, apiKey: string}): GdiCasesServer => ({
 	listCasesBySubjectId: subjectId => request
-		.get(makeUrl('/api/v1/cases/list-cases-by-subject', url))
+		.get(makeUrl(`/api/v1/cases/list/${encodeURIComponent(subjectId)}`, url))
 		.trustLocalhost()
 		.accept('application/json')
 		.auth(apiKey, { type: 'bearer' })
-		.query({ subjectId })
 		.then(({ body }) => body as GdiCasesServerCase[]),
+		
+	markAsRead: recordId => request
+		.post(makeUrl(`/api/v1/cases/stats/mark-as-read/${encodeURIComponent(recordId)}`, url))
+		.trustLocalhost()
+		.auth(apiKey, { type: 'bearer' })
+		.then(() => void 0),
 })
 
 export const createNullGdiCasesServer = (): GdiCasesServer => ({
 	listCasesBySubjectId: async () => ([]),
+	markAsRead: async () => void 0,
 })
 
 export const createGdiCasesServerFromEnv = (): GdiCasesServer => {

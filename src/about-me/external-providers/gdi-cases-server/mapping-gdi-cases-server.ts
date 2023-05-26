@@ -8,4 +8,6 @@ export const createMappingGdiCasesServer = (inner: GdiCasesServer, map: GdiCases
 	listCasesBySubjectId: async (subjectId) => inner
 		.listCasesBySubjectId(subjectId)
 		.then(cases => map(subjectId, cases)),
+	markAsRead: async (recordId) => inner
+		.markAsRead(recordId),
 })

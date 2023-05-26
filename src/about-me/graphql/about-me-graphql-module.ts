@@ -11,6 +11,8 @@ export const createAboutMe = (services: AboutMeServices): GraphQLModule => ({
 		scalar Date
 
 		type Case {
+			recordId: String
+			isMarkedAsRead: Boolean
 			caseId: String
 			subjectId: String
 			updateTime: String
@@ -66,6 +68,7 @@ export const createAboutMe = (services: AboutMeServices): GraphQLModule => ({
 		}
 		type Mutation {
 			updateMe(me: PersonInput): Person
+			markCaseAsRead(recordId: String): Boolean
 		}
 		schema {
 			query: Query
@@ -89,6 +92,7 @@ export const createAboutMe = (services: AboutMeServices): GraphQLModule => ({
 				...await services.persons.updatePerson(id, me, () => ({ id, firstName, lastName, type: 'person' })),
 				cases: async () => services.gdiCases?.listCasesBySubjectId(id) || [],
 			}),
+			markCaseAsRead: async ({ args: { recordId } }) => services.gdiCases?.markAsRead(recordId).then(()=> true) || false,
 		},
 	},
 })

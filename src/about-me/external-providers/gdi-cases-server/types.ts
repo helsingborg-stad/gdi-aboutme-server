@@ -1,4 +1,6 @@
 export interface GdiCasesServerCase {
+	recordId: string
+	isMarkedAsRead: boolean
 	caseId: string
 	subjectId: string
 	updateTime: string
@@ -27,4 +29,5 @@ export interface GdiCasesServerCaseAction {
 
 export interface GdiCasesServer {
 	listCasesBySubjectId: (subjectId: string) => Promise<GdiCasesServerCase[]>
+	markAsRead: (recordId: string) => Promise<void>
 }
